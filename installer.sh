@@ -18,6 +18,7 @@ export KMS_KEY_NAME="$KMS_KEY_NAME"
 export KMS_KEY_VERSION="$KMS_KEY_VERSION"
 export SERVICE_ACCOUNT="$SERVICE_ACCOUNT"
 export USER_SOURCE_REPO_NAME="$USER_SOURCE_REPO_NAME"
+export USER_SOURCE_REPO_LOCAL_DIR="$USER_SOURCE_REPO_LOCAL_DIR"
 
 # Set by Terraform, not used by envsubst.
 # These next few lines are technically unnecessary, but will cause the program to terminate
@@ -26,7 +27,7 @@ CLOUD_WORKSTATION_NAME="$CLOUD_WORKSTATION_NAME"
 CLOUD_WORKSTATION_CLUSTER="$CLOUD_WORKSTATION_CLUSTER"
 CLOUD_WORKSTATION_CONFIG="$CLOUD_WORKSTATION_CONFIG"
 
-CLOUD_SOURCE_REPOSITORY_DIR="${HOME}/${USER_SOURCE_REPO_NAME}"
+CLOUD_SOURCE_REPOSITORY_DIR="${USER_SOURCE_REPO_LOCAL_DIR}/${USER_SOURCE_REPO_NAME}"
 
 # Set programatically for git config
 TOKEN=$(curl http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token -H Metadata-Flavor:Google | jq -r '.access_token')
@@ -75,17 +76,38 @@ cp "java-sample-app/config/hello-world-dev-config.sh" "${CONFIG_DIR}/.hello-worl
 
 TUNNEL_PORT="43431"
 
+# Configure an alternative port if the default port is already in use
+while nc -z localhost $TUNNEL_PORT; do
+  TUNNEL_PORT=$((TUNNEL_PORT+1))
+done
+
+WORKSTATION_STATUS=$(gcloud workstations describe $CLOUD_WORKSTATION_NAME \
+  --project="${PROJECT_ID}" \
+  --cluster="${CLOUD_WORKSTATION_CLUSTER}" \
+  --config="${CLOUD_WORKSTATION_CONFIG}" \
+  --region="${REGION}" \
+  --format "value(state)")
+
+if [ ${WORKSTATION_STATUS} != "STATE_RUNNING" ]; then
+  echo "Starting Cloud Workstation..."
+  gcloud workstations start $CLOUD_WORKSTATION_NAME \
+    --project="${PROJECT_ID}" \
+    --cluster="${CLOUD_WORKSTATION_CLUSTER}" \
+    --config="${CLOUD_WORKSTATION_CONFIG}" \
+    --region="${REGION}"
+fi
+
 gcloud beta workstations start-tcp-tunnel $CLOUD_WORKSTATION_NAME 22 \
+  --project="${PROJECT_ID}" \
   --cluster="${CLOUD_WORKSTATION_CLUSTER}" \
   --config="${CLOUD_WORKSTATION_CONFIG}" \
   --region="${REGION}" \
   --local-host-port="localhost:${TUNNEL_PORT}" &
 
 echo "waiting for tunnel to open.."
-TUNNEL_PID="$(jobs -l | tail -n1 | cut -d' ' -f3)"
+TUNNEL_PID="$(jobs -l | tail -n1 | cut -d' ' -f2)"
 
 while ! nc -z localhost $TUNNEL_PORT; do   
-  ps -p $TUNNEL_PID
   sleep 0.1
 done
 echo "tunnel opened"
