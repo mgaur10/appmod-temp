@@ -8,6 +8,9 @@ resource "google_artifact_registry_repository" "docker_repo" {
   description   = "Sample Hello World Docker repo"
   format        = "DOCKER"
   project       = google_project.app_dev_project.project_id
+  depends_on = [
+    time_sleep.wait_for_org_policy,
+  ]
 }
 
 
@@ -15,6 +18,9 @@ resource "google_artifact_registry_repository" "docker_repo" {
 resource "google_sourcerepo_repository" "my-repo" {
   name = "hello-world-java"
   project       = google_project.app_dev_project.project_id
+  depends_on = [
+    time_sleep.wait_for_org_policy,
+  ]
 }
 
 

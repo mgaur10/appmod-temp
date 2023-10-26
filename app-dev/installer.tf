@@ -1,7 +1,7 @@
 
 
 
-resource "null_resource" "installer1" {
+resource "null_resource" "installer" {
   triggers = {
     always_run = "${timestamp()}"
   }
@@ -27,6 +27,7 @@ google_kms_crypto_key.signing_key,
     google_workstations_workstation.hello_world_workstation,
  google_workstations_workstation_cluster.workstation_cluster,
         google_workstations_workstation_config.workstation_cluster_config,
+        resource.null_resource.start_workstaion,
    ]
 }
 

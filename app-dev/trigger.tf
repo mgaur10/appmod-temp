@@ -10,7 +10,7 @@ gcloud beta builds triggers create cloud-source-repositories \
   --build-config=cloudbuild-launcher.yaml \
   --substitutions='_REPO_URL=$(csr.url)'
 
-  */
+
 
 
 # To confirm use of   --substitutions='_REPO_URL=$(csr.url)'
@@ -32,3 +32,4 @@ resource "google_cloudbuild_trigger" "cloud_source_repositories" {
   #   google_project_iam_member.logs_writer
   # ]
 }
+  */

@@ -25,10 +25,12 @@ resource "google_workstations_workstation_cluster" "workstation_cluster" {
   location               = var.network_region
   project                = google_project.app_dev_project.project_id
 
-  private_cluster_config {
-   enable_private_endpoint = true
-   
-   }
+  dynamic "private_cluster_config" {
+    for_each = var.workstation_private_config == false ? [] : [true]
+      content {
+        enable_private_endpoint = true
+      }
+  }
 
   # labels = {
   #   "label" = "key"
@@ -62,6 +64,7 @@ gcloud compute forwarding-rules create private-workstation-endpoint \
 */
 
 resource "google_compute_address" "ipsec-interconnect-address" {
+count      = var.workstation_private_config == false ? 0 : 1    
   name          = "workstation-psc-address"
   address_type  = "INTERNAL"
 #  purpose       = "PRIVATE_SERVICE_CONNECT"
@@ -78,6 +81,7 @@ resource "google_compute_address" "ipsec-interconnect-address" {
 
 
 resource "google_compute_forwarding_rule" "default" {
+    count      = var.workstation_private_config == false ? 0 : 1
   name                    = "private-workstation-endpoint"
   region  = var.network_region
     project                = google_project.app_dev_project.project_id
@@ -85,7 +89,7 @@ resource "google_compute_forwarding_rule" "default" {
   load_balancing_scheme   = ""
   target                  = google_workstations_workstation_cluster.workstation_cluster.private_cluster_config[0].service_attachment_uri
  network                = google_compute_network.primary_network.id
-  ip_address              = google_compute_address.ipsec-interconnect-address.id
+  ip_address              = google_compute_address.ipsec-interconnect-address[count.index].id
  #   subnetwork             =  google_compute_subnetwork.vpc_subnetwork.id
 
  # allow_psc_global_access = true
@@ -129,8 +133,8 @@ resource "google_workstations_workstation_config" "workstation_cluster_config" {
   location               = var.network_region
   project                = google_project.app_dev_project.project_id
 
-  idle_timeout    = "600s"
-  running_timeout = "21600s"
+  idle_timeout    = "3600s"
+ # running_timeout = "21600s"
 
 
   host {

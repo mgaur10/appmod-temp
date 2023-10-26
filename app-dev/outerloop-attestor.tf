@@ -55,7 +55,7 @@ resource "google_kms_crypto_key" "signing_key" {
 
   version_template {
     algorithm        = var.kms_key_algorithm
-    protection_level = var.kms_protection_level
+  #  protection_level = var.kms_protection_level
   }
 
   lifecycle {

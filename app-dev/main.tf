@@ -21,11 +21,20 @@ resource "random_id" "random_suffix" {
   byte_length = 4
 }
 
+
+
+# Create Folder in GCP Organization
+resource "google_folder" "app_dev" {
+  display_name = var.folder_name
+  parent       = "organizations/${var.organization_id}"
+}
+
+
 # Create the project
 resource "google_project" "app_dev_project" {
   billing_account = var.billing_account
-  org_id          = var.organization_id
-  # folder_id  = var.folder_id
+  #org_id          = var.organization_id
+   folder_id  = google_folder.app_dev.name
   # labels     = var.labels
   name       = var.project_name
   project_id = "${var.project_name}-${random_id.random_suffix.hex}"

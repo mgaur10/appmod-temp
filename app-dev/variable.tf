@@ -36,11 +36,25 @@ variable "developer_service_account" {
   description = "inner/outer dev loop service agent"
 }
 
+variable "folder_name" {
+  type        = string
+  default     = "CSA-AppDev-2"
+  description = "A folder to create this project under. If none is provided, the project will be created under the organization"
+}
+
+
 
 variable "skip_delete" {
   description = " If true, the Terraform resource can be deleted without deleting the Project via the Google API."
 
 }
+
+variable "workstation_private_config" {
+  description = "An allowed list of members (users, service accounts). The signed-in identity originating the request must be a part of one of the provided members. If not specified, a request may come from any user (logged in/not logged in, etc.). Formats: user:{emailid}, serviceAccount:{emailid}"
+  type        = bool
+default     = false
+}
+
 
 
 variable "end_user_account" {
@@ -429,13 +443,13 @@ SHARED_SECRET=$VPN_SHARED_SECRET
 variable "kms_keyring_name" {
   type        = string
   description = "kms keyring name"
-  default     = "hello-world-keyring9"
+  default     = "hello-world-keyring1"
 }
 
 variable "kms_key_name" {
   type        = string
   description = "kms key name"
-  default     = "hello-world-key9"
+  default     = "hello-world-key1"
 }
 
 variable "kms_key_version" {
