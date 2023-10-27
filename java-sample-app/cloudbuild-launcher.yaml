@@ -1,0 +1,53 @@
+substitutions:
+  _DOCKER_REPO_NAME: hello-world-docker-repository
+  _DOCKER_REPO_URL: "us-central1-docker.pkg.dev/${PROJECT_ID}/${_DOCKER_REPO_NAME}"
+  _SKAFFOLD_VERSION: "v2.6.0"
+  _SKAFFOLD_URL: "https://storage.googleapis.com/skaffold/releases/${_SKAFFOLD_VERSION}/skaffold-linux-amd64"
+  _WORKER_SERVICE_ACCOUNT: "assured-oss@springboard-test-3.iam.gserviceaccount.com"
+
+steps:
+- name:  gcr.io/cloud-builders/gcloud
+  entrypoint: bash
+  args:
+  - '-eox'
+  - 'pipefail'
+  - '-c'
+  - >
+    curl -Lo "/tmp/skaffold" '${_SKAFFOLD_URL}' &&
+    install /tmp/skaffold /usr/bin &&
+    skaffold build --dry-run -q &&
+    IMAGE_NAME_AND_TAGS="$(skaffold build --dry-run -q | grep --color=never -oP '(?<="tag":")[^"]*' | tr '\n' '|' | sed -e 's/|$//g')" && 
+    IFS='|' read -r -a IMAGE_NAME_AND_TAGS_ARRAY <<< "$${IMAGE_NAME_AND_TAGS}" &&
+    echo "$${IMAGE_NAME_AND_TAGS_ARRAY[@]}" &&
+    IMAGES=() &&
+    COUNT=0 &&
+    for IMG_NAME_AND_TAG in "$${IMAGE_NAME_AND_TAGS_ARRAY[@]}"; do
+
+    IMAGES[$${COUNT}]="${_DOCKER_REPO_URL}/$${IMG_NAME_AND_TAG}" &&
+    COUNT=$$((COUNT+1))
+
+    done &&
+
+    cp cloudbuild.yaml /tmp/cloudbuild-rendered.yaml &&
+    sed -z -E "s/(images\:[^-]*).*\"/\1/g" -i /tmp/cloudbuild-rendered.yaml &&
+
+    for IMAGE in "$${IMAGES[@]}"; do
+
+    IMAGE_ESCAPED=$(echo "$${IMAGE}" | sed -E 's/\//\\\//g') &&
+    sed -E "s/(images\:)/\1\n- $${IMAGE_ESCAPED}/g" -i /tmp/cloudbuild-rendered.yaml
+
+    done &&
+    cat /tmp/cloudbuild-rendered.yaml &&
+
+    gcloud builds submit "${_REPO_URL}" 
+    --git-source-revision=${COMMIT_SHA}
+    --substitutions=_IMAGE_NAME_AND_TAGS="$${IMAGE_NAME_AND_TAGS}"
+    --region=${LOCATION}
+    --config=/tmp/cloudbuild-rendered.yaml
+    --async
+
+options:
+  dynamic_substitutions: true
+  logging: CLOUD_LOGGING_ONLY
+  pool:
+    name: 'projects/${PROJECT_ID}/locations/us-central1/workerPools/hello-world-private-pool'
