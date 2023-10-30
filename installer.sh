@@ -42,7 +42,10 @@ WORK_DIR="$(mktemp -d)/${USER_SOURCE_REPO_NAME}"
 cp -r java-sample-app "${WORK_DIR}"
 
 # Install 'nc' if it doesn't already exits
-sudo apt-get install netcat -y -q
+if ! command -v nc &> /dev/null
+then
+  sudo apt-get install netcat -y -q
+fi
 
 # Don't substitute $PROJECT_ID in cloudbuild.yaml since it's a predefined Cloud Build var
 envsubst '$DELIVERY_PIPELINE_NAME $DOCKER_REPO_NAME $PRIVATE_WORKER_POOL $ATTESTOR_NAME $KMS_KEYRING_NAME $KMS_KEY_NAME $KMS_KEY_VERSION $SERVICE_ACCOUNT' < "${WORK_DIR}/cloudbuild.yaml.tmpl" > "${WORK_DIR}/cloudbuild.yaml"
@@ -66,7 +69,14 @@ pushd "${CLOUD_SOURCE_REPOSITORY_DIR}"
   git add .
   git diff-index --quiet HEAD || git commit -m 'first commit'
   git push origin master
+
+  # Create the Cloud Deploy Pipeline
+  gcloud deploy apply \
+    --file="clouddeploy.yml" \
+    --region="${REGION}" \
+    --project="${PROJECT_ID}"
 popd
+
 
 CONFIG_DIR="$(mktemp -d)/conf"
 
