@@ -24,10 +24,20 @@ if [ ! -f "$M2_HOME.zip" ]; then
   sudo chown user:user /opt/apache-maven/
 
   echo "Downloading apache maven..."
+  TMP_MVN_ZIP=$(mktemp)
   # See https://maven.apache.org/wrapper/ for docs
-  curl -s -L -H "Authorization: Bearer $GOOGLE_OAUTH_ACCESS_TOKEN" \
+  curl -s -f -L -H "Authorization: Bearer $GOOGLE_OAUTH_ACCESS_TOKEN" \
     https://us-maven.pkg.dev/cloud-aoss/java/org/apache/maven/apache-maven/${MVN_VERSION}/apache-maven-${MVN_VERSION}-bin.zip \
-    --output "$M2_HOME.zip"
+    --output "${TMP_MVN_ZIP}"
+  CURL_EXIT_CODE=$?
+  if [ "${CURL_EXIT_CODE}" -eq "0" ]; then
+    mv "${TMP_MVN_ZIP}" "${M2_HOME}.zip"
+  else
+    echo "FAILED: Maven installation from Assured OSS has failed. Please run the following command and diagnose the response:"
+    echo "$ curl -s -v -L -H \"Authorization: Bearer \$GOOGLE_OAUTH_ACCESS_TOKEN\" https://us-maven.pkg.dev/cloud-aoss/java/org/apache/maven/apache-maven/${MVN_VERSION}/apache-maven-${MVN_VERSION}-bin.zip"
+    echo "If you recieve a 403 error, please ensure that your Service Account has been registered for Assured OSS via: https://developers.google.com/assured-oss"
+    echo ""
+  fi
 fi
 
 if [ ! -f "/var/log/minikube.log" ]; then
