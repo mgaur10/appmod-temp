@@ -22,14 +22,14 @@ resource "google_cloudbuild_trigger" "cloud_source_repositories" {
 
   trigger_template {
     branch_name = "master"
-    repo_name   = "projects/${google_project.app_dev_project.project_id}/repos/hello-world-java"
+    repo_name   = "hello-world-java"
   }
  substitutions = {
-    _REPO_URL= "$$(csr.url)"
+    _REPO_URL= "$(csr.url)"
   }
 
   service_account = google_service_account.developer_service_account.id
-  filename        = "java-sample-app/cloudbuild.yaml"
+  filename        = "cloudbuild-launcher.yaml"
    depends_on = [
     resource.null_resource.installer,
   ]
