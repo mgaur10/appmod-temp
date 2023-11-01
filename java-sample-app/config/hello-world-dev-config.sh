@@ -43,9 +43,9 @@ fi
 startMinikube() {
   daemonize=$1
   if [ "$daemonize" = "-d" ]; then
-    nohup minikube start >> /var/log/minikube.log 2>&1 &
+    nohup minikube start --cache-images=false >> /var/log/minikube.log 2>&1 &
   else
-    minikube start 2>&1 | tee -a /var/log/minikube.log
+    minikube start --cache-images=false 2>&1 | tee -a /var/log/minikube.log
   fi
 }
 export -f startMinikube

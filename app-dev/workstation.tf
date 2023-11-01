@@ -110,7 +110,7 @@ resource "null_resource" "workstation_cluster_config" {
     
   provisioner "local-exec" {
     command = <<EOF
-    gcloud workstations configs create workstation-config --machine-type e2-standard-4 --shielded-secure-boot --shielded-vtpm --shielded-integrity-monitoring --disable-public-ip-addresses --region us-central1 --cluster workstation-cluster --project=${google_project.app_dev_project.project_id}
+    gcloud workstations configs create workstation-config --machine-type e2-standard-4 --shielded-secure-boot --shielded-vtpm --shielded-integrity-monitoring --disable-public-ip-addresses --region us-central1 --cluster workstation-cluster --project=${google_project.app_dev_project.project_id} --service-account "${google_service_account.developer_service_account.email}" --service-account-scopes "https://www.googleapis.com/auth/monitoring.write,https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/devstorage.read_only,https://www.googleapis.com/auth/userinfo.email,https://www.googleapis.com/auth/cloud-platform"
     EOF
   }
 
@@ -121,7 +121,8 @@ resource "null_resource" "workstation_cluster_config" {
     EOF
   }
  
-  depends_on = [google_workstations_workstation_cluster.workstation_cluster]
+  depends_on = [google_workstations_workstation_cluster.workstation_cluster,
+                google_service_account.developer_service_account]
 }
  */
 
@@ -139,7 +140,8 @@ resource "google_workstations_workstation_config" "workstation_cluster_config" {
 
   host {
     gce_instance {
-      #        service_account = "${google_service_account.developer_service_account.email}"
+      service_account = "${google_service_account.developer_service_account.email}"
+      service_account_scopes = ["https://www.googleapis.com/auth/monitoring.write","https://www.googleapis.com/auth/logging.write","https://www.googleapis.com/auth/devstorage.read_only","https://www.googleapis.com/auth/userinfo.email","https://www.googleapis.com/auth/cloud-platform"]
       machine_type = "e2-standard-4"
       # boot_disk_size_gb           = 35
       disable_public_ip_addresses = true
@@ -151,8 +153,19 @@ resource "google_workstations_workstation_config" "workstation_cluster_config" {
     }
   }
 
+  persistent_directories {
+    mount_path = "/home"
+    gce_pd {
+      size_gb        = 200
+      fs_type        = "ext4"
+      disk_type      = "pd-standard"
+      reclaim_policy = "DELETE"
+    }
+  }
+
   depends_on = [
     google_workstations_workstation_cluster.workstation_cluster,
+    google_service_account.developer_service_account
   ]
 }
 
