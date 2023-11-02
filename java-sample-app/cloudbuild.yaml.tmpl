@@ -36,15 +36,16 @@ steps:
   - 'pipefail'
   - '-c'
   - >
-    export GOOGLE_OAUTH_ACCESS_TOKEN="$(curl ${_TOKEN_URL} -H 'Metadata-Flavor:Google' |  sed -E 's/.*"access_token":"?([^,"]*)"?.*/\1/')" &&
+    export GOOGLE_OAUTH_ACCESS_TOKEN="$(curl -sf ${_TOKEN_URL} -H 'Metadata-Flavor:Google' |  sed -E 's/.*"access_token":"?([^,"]*)"?.*/\1/')" &&
     export M2_HOME="/opt/apache-maven/apache-maven-${_MVN_VERSION}" &&
     export MAVEN_CONFIG="" &&
     AUTHORIZATION_HEADER="Authorization: Bearer $${GOOGLE_OAUTH_ACCESS_TOKEN}" &&
     mkdir -p /opt/apache-maven /root/.m2 /tmp/bin &&
     mv /workspace/docker /usr/bin &&
     cp /workspace/config/maven_settings.xml /root/.m2/settings.xml &&
-    curl -Lo "$${M2_HOME}.zip" -H "$$AUTHORIZATION_HEADER" '${_MVN_URL}' &&
-    curl -Lo "/tmp/skaffold" '${_SKAFFOLD_URL}' &&
+    (curl -sfL -o "$${M2_HOME}.zip" -H "$$AUTHORIZATION_HEADER" '${_MVN_URL}' ||
+    echo "FAILURE: Could not fetch Maven from Assured OSS repository at URL: ${_MVN_URL}") &&
+    curl -sfL -o "/tmp/skaffold" '${_SKAFFOLD_URL}' &&
     install /tmp/skaffold /usr/bin &&
     skaffold build
     --interactive=false
@@ -54,7 +55,7 @@ steps:
     --profile=staging
     --default-repo=${_DOCKER_REPO_URL}
 
-- # Re-tag docker image with proper tags, push the container, 
+  # Re-tag docker image with proper tags, push the container,
   # and update /workspace/artifacts.json with real container sha and tags.
   name: 'gcr.io/cloud-builders/docker'
   entrypoint: bash
