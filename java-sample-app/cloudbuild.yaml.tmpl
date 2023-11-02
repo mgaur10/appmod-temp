@@ -1,6 +1,6 @@
 # This file cannot be submitted to a Cloud Build job directly, due to requirements for a dynamic 'images\:' configuration below.
-# The 'cloudbuild-launcher.yaml' is designed to be the entry point configuration and will launch a seperate job after dynamically populating the 'images:\' configuration below.
-# All Cloud Build submissions and triggers must reference 'cloudbuild-launcher.yaml' instead of this file.
+# The 'cloudbuild-launcher.yaml' is designed to be the entry point configuration and will launch a seperate job using this file's configuration after dynamically populating the 'images:\' configuration below.
+# All Cloud Build submit commands and triggers must reference 'cloudbuild-launcher.yaml' instead of this file.
 
 substitutions:
   _IMAGE_NAME_AND_TAGS: "<provided at build submit time>"
