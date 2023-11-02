@@ -36,7 +36,7 @@ if [ ! -f "$M2_HOME.zip" ]; then
     echo "FAILED: Maven installation from Assured OSS has failed. Please run the following command and diagnose the response:"
     echo "$ curl -s -v -L -H \"Authorization: Bearer \$GOOGLE_OAUTH_ACCESS_TOKEN\" https://us-maven.pkg.dev/cloud-aoss/java/org/apache/maven/apache-maven/${MVN_VERSION}/apache-maven-${MVN_VERSION}-bin.zip"
     echo ""
-    echo "If you recieve a 403 error, please ensure that your Service Account has been registered for Assured OSS via: https://developers.google.com/assured-oss"
+    echo "If you recieve a 403 error, please ensure that your Service Account: \"${SERVICE_ACCOUNT}\" is attached to your Workstation Configuration and has been registered for Assured OSS via: https://developers.google.com/assured-oss"
     echo "When you fix the issue, please open a new terminal to re-initialize the services"
     echo ""
   fi

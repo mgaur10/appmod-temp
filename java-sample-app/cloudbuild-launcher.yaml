@@ -6,10 +6,10 @@ substitutions:
   _WORKER_SERVICE_ACCOUNT: "assured-oss@springboard-test-3.iam.gserviceaccount.com"
 
 steps:
-- name:  gcr.io/cloud-builders/gcloud
+- name: gcr.io/cloud-builders/gcloud
   entrypoint: bash
   args:
-  - '-eox'
+  - '-eo'
   - 'pipefail'
   - '-c'
   - >
@@ -41,7 +41,7 @@ steps:
 
     gcloud builds submit "${_REPO_URL}" 
     --git-source-revision=${COMMIT_SHA}
-    --substitutions=_IMAGE_NAME_AND_TAGS="$${IMAGE_NAME_AND_TAGS}"
+    --substitutions=_IMAGE_NAME_AND_TAGS="$${IMAGE_NAME_AND_TAGS}",_FAIL_ON_VULNERABILITY="${_FAIL_ON_VULNERABILITY}"
     --region=${LOCATION}
     --config=/tmp/cloudbuild-rendered.yaml
     --async
