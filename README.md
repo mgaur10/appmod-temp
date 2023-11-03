@@ -28,13 +28,17 @@ You may now begin to use your Secure Development Environment
 
 1. Open the Google Cloud Console through a web browser and navigate to the [Cloud Workstations page](https://console.cloud.google.com/workstations/list)
 2. Navigate to you Cloud Workstation (named 'hello-world-worksation' be default) and click the 'Launch' button. Note: If you see the 'Start' button instead of 'Launch', click the 'Start' button and then click the 'Launch' button once it becomes available.
-  ![Screenshot 2023-11-03 12 49 46 PM](https://github.com/mgaur10/appmod-temp/assets/38972/61aac3fa-f492-41e0-82f8-91d4e4b4b79c)
+    * <img alt="Workstation File Menu GUI" src="https://github.com/mgaur10/appmod-temp/assets/38972/61aac3fa-f492-41e0-82f8-91d4e4b4b79c" width=300>
+
 4. You should now be in a new browser tab viewing your 'Code OSS' IDE.
-  ![Screenshot 2023-11-02 9 29 16 PM](https://github.com/mgaur10/appmod-temp/assets/38972/e65eab05-9642-4b74-890b-0ad6daf517db)
+    * <img alt="Code OSS IDE" src="https://github.com/mgaur10/appmod-temp/assets/38972/e65eab05-9642-4b74-890b-0ad6daf517db" width=600>
+
 5. Click the menu 'File -> Open Folder -> hello_word_java' to open your Java Sample Application project directory
-  ![Screenshot 2023-11-02 9 30 10 PM](https://github.com/mgaur10/appmod-temp/assets/38972/d618f3c3-4cad-4547-bc20-69d20593070f)
-6. Click the menu 'Terminal -> New Terminal'
-  ![Screenshot 2023-11-02 9 30 54 PM](https://github.com/mgaur10/appmod-temp/assets/38972/7bbf23b9-c95f-4d3c-a24c-31efd46abc9e)
+    * <img alt="Code OSS IDE" src="https://github.com/mgaur10/appmod-temp/assets/38972/d618f3c3-4cad-4547-bc20-69d20593070f" width=600>
+
+7. Click the menu 'Terminal -> New Terminal'
+    * <img alt="Code OSS IDE" src="https://github.com/mgaur10/appmod-temp/assets/38972/7bbf23b9-c95f-4d3c-a24c-31efd46abc9e" width=600>
+
 8. You should see messages about Maven installation, Minikube starting, and Skaffold starting
 10. Authorize your end-user account to the Workstation 'gcloud' cli in the terminal: `gcloud auth login`, and follow the steps to sign in.
 11. Verify that the sample application is running and responding to requests
@@ -47,7 +51,7 @@ You may now begin to use your Secure Development Environment
 13. Commit and push your changes to the remote repository: `git add src && git commit -m "first custom commit" && git push`.
     * Note: Your repository is configured to use your 'gcloud' credentials to authenticate with the remote Cloud Source Repository. If there is an authentication problem, you may have forgotten to run `gcloud auth login` as described above.
 14. Navigate to Cloud Build and verify that your 'Outer Dev Loop' build pipeline has completed successfully.
-  ![Screenshot 2023-11-03 12 55 51 PM](https://github.com/mgaur10/appmod-temp/assets/38972/6e2a31f2-8bc9-4b64-90be-4d65edc2a2b3)
+    * <img alt="Code Build History Page" src="https://github.com/mgaur10/appmod-temp/assets/38972/6e2a31f2-8bc9-4b64-90be-4d65edc2a2b3" width=600>
   * NOTE: There will be a total of 4 Builds that need to be successful: 1 that is triggered is declared in your Cloud Build Trigger, 1 that is submitted by the Build called from your Cloud Build Trigger, 2 that are submitted automatically by Cloud Deploy for your new release (that call the skaffold 'render' and 'deploy' stages).
 16. When the Cloud Build steps have completed successfully, validate that your application can receive requests from your Cloud Workstations.
     * Set your k8s configuration to reference your remote GKE Cluster: `gcloud container clusters get-credentials hello-world-cluster --region us-central1`
