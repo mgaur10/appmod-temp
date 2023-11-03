@@ -1,7 +1,6 @@
-# This file cannot be submitted to a Cloud Build job directly, due to requirements for a dynamic 'images\:' configuration below.
-# The 'cloudbuild-launcher.yaml' is designed to be the entry point configuration and will launch a seperate job using this file's configuration after dynamically populating the 'images:\' configuration below.
+# This file cannot be submitted to a Cloud Build job directly, due to requirements for a dynamic images configuration below.
+# The cloudbuild-launcher.yaml is designed to be the entry point configuration and will launch a seperate job using this file's configuration after dynamically populating the images configuration below.
 # All Cloud Build submit commands and triggers must reference 'cloudbuild-launcher.yaml' instead of this file.
-
 substitutions:
   _IMAGE_NAME_AND_TAGS: "<provided at build submit time>"
   _DELIVERY_PIPELINE_NAME: "$DELIVERY_PIPELINE_NAME"
@@ -19,10 +18,10 @@ substitutions:
   _TOKEN_URL: "http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token"
   _WORKER_SERVICE_ACCOUNT: "$SERVICE_ACCOUNT"
 
+
 steps:
-- # Copy the docker client binary out of the docker container
-  # so that the next step can use skaffold to build the container with docker.
-  # This is all to accommodate consistent container sha's for S3C
+- # Copy the Docker client binary out of the Docker container to allow
+  # the mvn builder in the next step to use it to build containers.
   name: gcr.io/cloud-builders/docker
   entrypoint: bash
   args:
@@ -32,7 +31,7 @@ steps:
   - >
     cp /bin/docker /workspace/docker
 
-- # Build the container with Skaffold to the local docker daemon.
+- # Build the container with Skaffold using the Docker client.
   name: gcr.io/cloud-builders/mvn
   entrypoint: bash
   args:
@@ -59,7 +58,7 @@ steps:
     --profile=staging
     --default-repo=${_DOCKER_REPO_URL}
 
-- # Re-tag docker image with proper tags, push the container,
+- # Re-tag Docker image with proper tags, push the container,
   # and update /workspace/artifacts.json with real container sha and tags.
   name: 'gcr.io/cloud-builders/docker'
   entrypoint: bash
@@ -186,3 +185,4 @@ options:
     name: 'projects/${PROJECT_ID}/locations/${LOCATION}/workerPools/${_PRIVATE_WORKER_POOL}'
   requestedVerifyOption: VERIFIED
   substitutionOption: 'ALLOW_LOOSE'
+
