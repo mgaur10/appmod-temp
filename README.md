@@ -52,7 +52,7 @@ You may now begin to use your Secure Development Environment
     * Note: Your repository is configured to use your 'gcloud' credentials to authenticate with the remote Cloud Source Repository. If there is an authentication problem, you may have forgotten to run `gcloud auth login` as described above.
 14. Navigate to Cloud Build and verify that your 'Outer Dev Loop' build pipeline has completed successfully.
     * <img alt="Code Build History Page" src="https://github.com/mgaur10/appmod-temp/assets/38972/6e2a31f2-8bc9-4b64-90be-4d65edc2a2b3" width=600>
-  * NOTE: There will be a total of 4 Builds that need to be successful: 1 that is triggered is declared in your Cloud Build Trigger, 1 that is submitted by the Build called from your Cloud Build Trigger, 2 that are submitted automatically by Cloud Deploy for your new release (that call the skaffold 'render' and 'deploy' stages).
+  * NOTE: There will be a total of 4 Builds that need to be successful: 1 that is declared in your Cloud Build Trigger (cloudbuild-launcher.yaml), 1 that is submitted by Build that ran through Cloud Build Trigger (cloudbuild.yaml), 2 that are submitted automatically by Cloud Deploy for your new release (that call the skaffold 'render' and 'deploy' stages).
 16. When the Cloud Build steps have completed successfully, validate that your application can receive requests from your Cloud Workstations.
     * Set your k8s configuration to reference your remote GKE Cluster: `gcloud container clusters get-credentials hello-world-cluster --region us-central1`
     * Open a tunnel via port-forwarding from your Cloud Workstation to your GKE Service: `kubectl port-forward services/spring-java-hello-world-service 9090:8080`
