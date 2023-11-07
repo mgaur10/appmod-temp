@@ -35,6 +35,12 @@ variable "end_user_account" {
   default     = "user:USER@DOMAIN.com"
 }
 
+variable "workstation_private_config" {
+  description = "An allowed list of members (users, service accounts). The signed-in identity originating the request must be a part of one of the provided members. If not specified, a request may come from any user (logged in/not logged in, etc.). Formats: user:{emailid}, serviceAccount:{emailid}"
+  type        = bool
+default     = false
+}
+
 /*
 variable "git_user_account" {
   description = "An allowed list of members (users, service accounts). The signed-in identity originating the request must be a part of one of the provided members. If not specified, a request may come from any user (logged in/not logged in, etc.). Formats: user:{emailid}, serviceAccount:{emailid}"
