@@ -1,23 +1,23 @@
-```
-This code creates demo environment for CSA - Application Development Architecture Pattern
+# Secure DevOps Architecture - Inner/Outer App Lifecycle
+
+This code creates a demo environment for Secure DevOps Architecture Pattern
 This demo code is not built for production workload
-```
-# Cloud Security Architecture Application Development DevSecOps Demo
+
 
 # Demo Guide
-This demo uses terraform to setup Cloud Security Architecture for Application Development/DevSecOps Demo in a project and underlying infrastructure using Google Cloud Services like  
+This demo uses Terraform to setup the Secure DevOps Architecture in a single folder and single project. The underlying infrastructure uses Google Cloud services like  
 [Artifact Registry](https://cloud.google.com/artifact-registry), [Assured Open Source Software](https://cloud.google.com/assured-open-source-software), [Binary Authorization](https://cloud.google.com/binary-authorization), [Cloud Build](https://cloud.google.com/build), [Cloud Deploy](https://cloud.google.com/deploy), 
-[Cloud Key Management](https://cloud.google.com/kms), [Cloud Compute Engine](https://cloud.google.com/compute), [Containers](https://cloud.google.com/containers), [Datastore](https://cloud.google.com/datastore), [Cloud DNS](https://cloud.google.com/dns), [Cloud Logging](https://cloud.google.com/logging), [Storage](https://cloud.google.com/storage) and [Cloud Workstations](https://cloud.google.com/workstations). 
+[Cloud Key Management](https://cloud.google.com/kms), [Compute Engine](https://cloud.google.com/compute), [GKE](https://cloud.google.com/containers), [Datastore](https://cloud.google.com/datastore), [Cloud DNS](https://cloud.google.com/dns), [Cloud Logging](https://cloud.google.com/logging), [Storage](https://cloud.google.com/storage) and [Cloud Workstations](https://cloud.google.com/workstations). 
 
 ## How to deploy?
-The following steps should be executed in Cloud Shell in the Google Cloud Console. Ensure no project is set in cloud shell. To unset a project use the below command.
+The following steps should be executed in Cloud Shell in the Google Cloud Console. Ensure no project is set in cloud shell. To unset a project use the command below.
 
 ```
 gcloud config unset project
 ```
 
 ### 1. IAM Permission 
-Grant the user running the terraform below roles.
+Grant the user running the Terraform below roles.
 ```
 TO BE UPDATED
 Billing Account User
@@ -29,7 +29,7 @@ DNS Administrator
 
 
 ### 2. Get the code
-Clone this github repository go to the root of the repository.
+Clone the GitHub repository and navigate to the root of the repository.
 
 ``` 
 git clone https://github.com/GCP-Architecture-Guides/CSA-App-Dev.git
@@ -56,7 +56,7 @@ gcloud projects get-ancestors [ANY_PROJECT_ID]
 ```
 
 
-**Note:** All the other variables are give a default value. If you wish to change, update the corresponding variables in variable.tf file.
+**Note:** All the other variables are given a default value. If you wish to change, update the corresponding variables in the variable.tf file.
 
 ### 4. Deployment Duration
 - Configuration: X mins TO BE UPDATED
