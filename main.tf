@@ -41,27 +41,45 @@ module "app-dev" {
   ip_subnetwork_cidr_pod_range     = var.ip_subnetwork_cidr_pod_range
   ip_subnetwork_cidr_service_range = var.ip_subnetwork_cidr_service_range
   gke_subnetwork_master_cidr_range = var.gke_subnetwork_master_cidr_range
-  git_user_account                 = var.git_user_account
-  git_user_email                   = var.git_user_email
-  git_user_name                    = var.git_user_name
-
-
-  #  iam_secure_tag                    = var.iam_secure_tag
-  /* 
-  vpc_network_name                  = var.vpc_network_name
-  primary_network_region            = var.primary_network_region
-  primary_network_zone              = var.primary_network_zone
-  primary_presentation_subnetwork   = var.primary_presentation_subnetwork
-  primary_middleware_subnetwork     = var.primary_middleware_subnetwork
-  primary_database_subnetwork       = var.primary_database_subnetwork
-  primary_sub_proxy                 = var.primary_sub_proxy
-  primary_ilb_ip                    = var.primary_ilb_ip
-  secondary_network_region          = var.secondary_network_region
-  secondary_network_zone            = var.secondary_network_zone
-  secondary_presentation_subnetwork = var.secondary_presentation_subnetwork
-  secondary_middleware_subnetwork   = var.secondary_middleware_subnetwork
-  secondary_sub_proxy               = var.secondary_sub_proxy
-  secondary_ilb_ip                  = var.secondary_ilb_ip
-*/
+#  git_user_account                 = var.git_user_account
+#  git_user_email                   = var.git_user_email
+#  git_user_name                    = var.git_user_name
+private_pool_peering_vpc_name = var.private_pool_peering_vpc_name
+reserved_range_name = var.reserved_range_name
+private_pool_network = var.private_pool_network
+private_pool_prefix = var.private_pool_prefix
+private_pool_name = var.private_pool_name
+gw_name_1 = var.gw_name_1
+gw_name_2 = var.gw_name_2
+peer_asn_1 = var.peer_asn_1
+peer_asn_2 = var.peer_asn_2
+ip_address_1 = var.ip_address_1
+ip_address_2 = var.ip_address_2
+ip_address_3 = var.ip_address_3
+ip_address_4 = var.ip_address_4
+router_name_1 = var.router_name_1
+router_1_interface_name_0 = var.router_1_interface_name_0
+router_1_interface_name_1 = var.router_1_interface_name_1
+tunnel_name_gw1_if0 = var.tunnel_name_gw1_if0
+tunnel_name_gw1_if1 = var.tunnel_name_gw1_if1
+peer_name_gw1_if0 = var.peer_name_gw1_if0
+peer_name_gw1_if1 = var.peer_name_gw1_if1
+router_name_2 = var.router_name_2
+router_2_interface_name_0 = var.router_2_interface_name_0
+router_2_interface_name_1 = var.router_2_interface_name_1
+tunnel_name_gw2_if0 = var.tunnel_name_gw2_if0
+tunnel_name_gw2_if1 = var.tunnel_name_gw2_if1
+peer_name_gw2_if0 = var.peer_name_gw2_if0
+peer_name_gw2_if1 = var.peer_name_gw2_if1
+mask_length = var.mask_length
+kms_keyring_name = var.kms_keyring_name
+kms_key_name = var.kms_key_name
+kms_key_version = var.kms_key_version
+kms_key_purpose = var.kms_key_purpose
+kms_key_algorithm = var.kms_key_algorithm
+kms_protection_level = var.kms_protection_level
+note_id = var.note_id
+note_description = var.note_description
+attestor_name = var.attestor_name
 }
 
