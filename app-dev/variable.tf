@@ -38,7 +38,6 @@ variable "developer_service_account" {
 
 variable "folder_name" {
   type        = string
-  default     = "CSA-AppDev-2"
   description = "A folder to create this project under. If none is provided, the project will be created under the organization"
 }
 
@@ -51,7 +50,6 @@ variable "skip_delete" {
 variable "workstation_private_config" {
   description = "An allowed list of members (users, service accounts). The signed-in identity originating the request must be a part of one of the provided members. If not specified, a request may come from any user (logged in/not logged in, etc.). Formats: user:{emailid}, serviceAccount:{emailid}"
   type        = bool
-default     = false
 }
 
 
