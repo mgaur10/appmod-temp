@@ -24,8 +24,6 @@ resource "google_service_account" "developer_service_account" {
 }
 
 
-
-
 resource "google_project_iam_member" "developer_service_account" {
   for_each = toset(var.developer_roles)
   project  = google_project.app_dev_project.project_id
@@ -40,7 +38,6 @@ resource "google_project_iam_member" "developer_service_account" {
 
 
 
-
 resource "google_project_iam_member" "iam_user" {
   for_each = toset(var.end_user_roles)
   project  = google_project.app_dev_project.project_id
@@ -49,7 +46,6 @@ resource "google_project_iam_member" "iam_user" {
 
   member = var.end_user_account
 }
-
 
 
 resource "google_project_iam_member" "compute_default_account" {
@@ -72,5 +68,4 @@ resource "time_sleep" "wait_iam_roles" {
     google_project_iam_member.developer_service_account,
   ]
   create_duration = "55s"
-  # destroy_duration = "45s"
 }

@@ -34,23 +34,6 @@ resource "google_compute_firewall" "ids_allow_iap_proxy" {
   ]
 }
 
-/*
-resource "google_compute_firewall" "allow_all_internal" {
-  name      = "allow-all-internal"
-  network       = google_compute_network.primary_network.id
-  project  = google_project.app_dev_project.project_id
-  direction = "INGRESS"
-  allow {
-    protocol = "tcp, udp, icmp"
-  }
-  source_ranges = ["192.168.0.0/20"]
-
-  depends_on = [
-    google_compute_network.primary_network
-  ]
-}
-*/
-
 
 resource "google_compute_firewall" "allow_all_internal" {
   name    = "allow-all-internal"

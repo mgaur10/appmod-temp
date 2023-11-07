@@ -33,17 +33,11 @@ resource "google_folder" "app_dev" {
 # Create the project
 resource "google_project" "app_dev_project" {
   billing_account = var.billing_account
-  #org_id          = var.organization_id
-   folder_id  = google_folder.app_dev.name
-  # labels     = var.labels
+  #org_id          = var.organization_id    # Only one of `org_id` or `folder_id` may be specified
+  folder_id  = google_folder.app_dev.name   # Only one of `org_id` or `folder_id` may be specified
   name       = var.project_name
   project_id = "${var.project_name}-${random_id.random_suffix.hex}"
-
-  // Only one of `org_id` or `folder_id` may be specified, so we prefer the folder here.
-  // Note that `organization_id` is required, making this safe.
-  //org_id = var.folder_id == "" ? var.organization_id : var.folder_id
-
-  skip_delete = var.skip_delete
+skip_delete = var.skip_delete
 }
 
 
@@ -91,7 +85,6 @@ resource "google_project_service" "api_service" {
   project                    = google_project.app_dev_project.project_id
   disable_on_destroy         = false
   disable_dependent_services = true
-
 }
 
 

@@ -32,7 +32,8 @@ resource "google_project_organization_policy" "restrict_vpn_peer_ips" {
 }
 
 
-// Set Org policies to allow Vertex AI Workbench configuration
+# Set Org policies to allow unsheilded VM for workstation configuration
+#Setting up the IAM policy constraint. 
 
 module "org-policy-requireShieldedVm" {
   source      = "terraform-google-modules/org-policy/google"
@@ -79,9 +80,9 @@ resource "time_sleep" "wait_for_org_policy" {
   depends_on = [
     module.org-policy-requireShieldedVm,
      module.org-policy-domain-restricted-sharing,
-    # module.org-policy-vmExternalIpAccess, 
+    # module.org-policy-vmExternalIpAccess,  # Enable if module.org-policy-vmExternalIpAccess is enabled
       google_project_organization_policy.restrict_vpn_peer_ips,
   ]
-  create_duration  = "150s"
+  create_duration  = "180s"
   destroy_duration = "30s"
 }

@@ -43,7 +43,13 @@ output "workstation_all_attribute" {
 
 */
 
-output "gke_cluster" {
-  value     = google_container_cluster.hello_world_cluster.private_cluster_config[0].peering_name
-  sensitive = true
+output "_step1_follow_the_steps_to_register_service_account_for_OSS" {
+  value     = "Follow the URL: https://assuredoss.developers.google.com/"
 }
+
+
+output "_step2_register_the_service_account_for_OSS" {
+  value     = "${google_service_account.developer_service_account.email}"
+}
+
+

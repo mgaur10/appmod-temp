@@ -16,15 +16,8 @@
 ##  This code creates demo environment for CSA - Application Development Architecture Pattern   ##
 ##  This demo code is not built for production workload ##
 
-/*
-gcloud projects add-iam-policy-binding $VPC_HOST_PROJECT \
-    --member=serviceAccount:$VPC_HOST_PROJECT_NUMBER@cloudbuild.gserviceaccount.com \
-    --role=roles/container.developer
-
-*/
 
 resource "google_project_iam_binding" "compute_default_account" {
-  #  for_each = toset(var.compute_default_roles)
   project = google_project.app_dev_project.project_id
   role    = "roles/container.developer"
 

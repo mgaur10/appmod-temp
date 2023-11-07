@@ -20,7 +20,6 @@
 # Create VPC network
 resource "google_compute_network" "primary_network" {
   name = var.vpc_network_name
-  #  provider                = google-beta
   auto_create_subnetworks         = false
   delete_default_routes_on_create = false
   project                         = google_project.app_dev_project.project_id
@@ -31,7 +30,6 @@ resource "google_compute_network" "primary_network" {
 
 
 ### TO to updated
-# Primary presentation layer subnet
 resource "google_compute_subnetwork" "vpc_subnetwork" {
   name = var.vpc_subnetwork_name
   #  provider      = google-beta
@@ -45,8 +43,7 @@ resource "google_compute_subnetwork" "vpc_subnetwork" {
   #   flow_sampling        = 0.5
   #   metadata             = "INCLUDE_ALL_METADATA"
   # }
-  # Enable private Google acces
-
+  # Enable private Google access to be added in v2
 
   secondary_ip_range {
     range_name    = "pod-range"

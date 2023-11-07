@@ -32,36 +32,13 @@ resource "google_workstations_workstation_cluster" "workstation_cluster" {
       }
   }
 
-  # labels = {
-  #   "label" = "key"
-  # }
 
-  #annotations = {
-  #  label-one = "value-one"
-  #}
   depends_on = [
     google_compute_subnetwork.vpc_subnetwork,
   ]
 }
 
-/*
-gcloud compute addresses create workstation-psc-address \
-    --region=us-central1 \
-    --subnet=hello-world-cluster-subnet
 
-gcloud compute addresses list --filter="name=workstation-psc-address"
-
-export WORKSTATION_PSC_IP=$(gcloud compute addresses list --filter="name=workstation-psc-address" --format="value(ADDRESS)")
-
-gcloud compute forwarding-rules create private-workstation-endpoint \
-  --region=us-central1 \
-  --network=hello-world-network \
-  --address=workstation-psc-address \
-  --target-service-attachment=$WORKSTATION_CLUSTER_URI \
-  --service-directory-registration=projects/$PROJECT_ID/locations/us-central1/namespaces/hello-world-ns
-
-
-*/
 
 resource "google_compute_address" "ipsec-interconnect-address" {
 count      = var.workstation_private_config == false ? 0 : 1    
@@ -99,33 +76,6 @@ resource "google_compute_forwarding_rule" "default" {
 }
 
 
-/*
-resource "null_resource" "workstation_cluster_config" {
-  triggers = {
-    always_run = "${timestamp()}"
-    region = var.network_region
-    cluster =     "${google_workstations_workstation_cluster.workstation_cluster.workstation_cluster_id}"
-    project       = "${google_project.app_dev_project.project_id}"
-      }
-    
-  provisioner "local-exec" {
-    command = <<EOF
-    gcloud workstations configs create workstation-config --machine-type e2-standard-4 --shielded-secure-boot --shielded-vtpm --shielded-integrity-monitoring --disable-public-ip-addresses --region us-central1 --cluster workstation-cluster --project=${google_project.app_dev_project.project_id} --service-account "${google_service_account.developer_service_account.email}" --service-account-scopes "https://www.googleapis.com/auth/monitoring.write,https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/devstorage.read_only,https://www.googleapis.com/auth/userinfo.email,https://www.googleapis.com/auth/cloud-platform"
-    EOF
-  }
-
-  provisioner "local-exec" {
-    when = destroy
-    command = <<EOF
-    gcloud workstations configs delete workstation-config --region ${self.triggers.region} --cluster ${self.triggers.cluster} --project=${self.triggers.project} --quiet
-    EOF
-  }
- 
-  depends_on = [google_workstations_workstation_cluster.workstation_cluster,
-                google_service_account.developer_service_account]
-}
- */
-
 
 resource "google_workstations_workstation_config" "workstation_cluster_config" {
   provider               = google-beta
@@ -135,8 +85,6 @@ resource "google_workstations_workstation_config" "workstation_cluster_config" {
   project                = google_project.app_dev_project.project_id
 
   idle_timeout    = "3600s"
- # running_timeout = "21600s"
-
 
   host {
     gce_instance {
@@ -174,22 +122,11 @@ resource "google_workstations_workstation" "hello_world_workstation" {
   provider              = google-beta
   workstation_id        = "hello-world-workstation"
   workstation_config_id = google_workstations_workstation_config.workstation_cluster_config.workstation_config_id
-  #"workstation-config"
-  #google_workstations_workstation_config.workstation_cluster_config.workstation_config_id
   workstation_cluster_id = google_workstations_workstation_cluster.workstation_cluster.workstation_cluster_id
   location               = var.network_region
   project                = google_project.app_dev_project.project_id
 
-  # labels = {
-  #  "label" = "key"
-  # }
-
-  # annotations = {
-  #   label-one = "value-one"
-  #}
-
   depends_on = [
-    #null_resource.workstation_cluster_config,
     google_workstations_workstation_config.workstation_cluster_config,
   ]
 }
@@ -201,7 +138,6 @@ resource "null_resource" "start_workstaion" {
   }
 
   provisioner "local-exec" {
-    #interpreter = ["bash", "-c"]
     command = <<-EOT
     gcloud config set project ${google_project.app_dev_project.project_id}
     gcloud workstations start ${google_workstations_workstation.hello_world_workstation.workstation_id} --region ${var.network_region} --cluster ${google_workstations_workstation_cluster.workstation_cluster.workstation_cluster_id} --config workstation-config
