@@ -72,6 +72,32 @@ terraform destroy
 
 
 ## Detailed Overview
+This architecture enhances the inner and outer software development loops in Google Cloud Platform environments, while satisfying key security requirements. Automated with Terraform for minimal setup, it integrates key services like Skaffold, Jib, and Minikube within a Cloud Workstation, and services like Cloud Build, Cloud Deploy, and GKE, all under strict IAM policies and private networking. This solution streamlines development cycles and secure deployments, balancing rapid innovation with key security controls, and aligning with enterprise compliance standards.
+
+### Terraform Deployment Overview
+The Terraform configuration for this solution facilitates the automated creation and deployment of necessary resources within the Google Cloud Platform (GCP). This approach ensures consistency, repeatability, and a high level of customization for users, aligning with enterprise-grade infrastructure standards.
+
+### Key Features of Terraform Implementation
+1. Automated Resource Deployment: All resources required for the CSA - App Dev Arch Pattern are automatically created and deployed using Terraform.
+2. Minimal User Input Required: Users are required to modify only three key variables in the variables.tf file, making the deployment process straightforward and user-friendly.
+3. Customizable Variables: While certain variables are preset with recommended values, users retain the flexibility to alter these as needed to suit specific organizational requirements.
+4. Organizational Structure Compliance: The deployment is structured to occur within a new folder under the organization's hierarchy in GCP, ensuring compliance with organizational policies and structure.
+
+### Critical Variables in ‘variables.tf’
+- organization_id: User must provide the unique identifier of their organization within GCP.
+- billing_account: User must specify the billing account ID to associate with the deployed resources.
+- end_user_account: Defines the list of allowed members who can make requests to the deployed resources.
+
+Other variables, not listed here, are pre-configured but can be adjusted based on specific needs or preferences. These include settings related to network configurations, regions, and other resource-specific parameters.
+
+### Deployment in New Organizational Folder
+The Terraform script is designed to deploy resources within a new folder in the GCP organization. This approach:
+- Ensures Organizational Neatness: Keeps the deployment isolated and organized within the broader Google Cloud environment.
+- Facilitates Easier Management and Tracking: Enhances the ability to manage resources and monitor usage specific to this deployment.
+- Aligns with Security and Compliance Standards: Adheres to organizational policies and governance structures.
+
+
+
 
 The infrastructure for this solution aims to create a seamless DevOps pipeline for developers, employing a range of Google Cloud Platform (GCP) services for an integrated development experience. It is designed for Google Cloud customers who operate within an organizational structure that mandates enterprise security measures. This architecture is designed with the following in mind: 
 - No internet access for resources
