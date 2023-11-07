@@ -42,7 +42,12 @@ output "workstation_all_attribute" {
 }
 */
 
-output "gke_cluster" {
-  value     = module.app-dev.gke_cluster
-  sensitive = true
+
+output "_step1_follow_the_steps_to_register_service_account_for_Assured_OSS" {
+  value     = module.app-dev._step1_follow_the_steps_to_register_service_account_for_OSS
+}
+
+
+output "_step2_register_the_service_account_for_OSS" {
+  value     = module.app-dev._step2_register_the_service_account_for_Assured_OSS
 }

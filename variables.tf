@@ -29,10 +29,37 @@ variable "billing_account" {
   default     = "01660F-E4C304-5C8D2B"
 }
 
+variable "end_user_account" {
+  description = "An allowed list of members (users, service accounts). The signed-in identity originating the request must be a part of one of the provided members. If not specified, a request may come from any user (logged in/not logged in, etc.). Formats: user:{emailid}, serviceAccount:{emailid}"
+  type        = string
+  default     = "user:admin@manishkgaur.altostrat.com"
+}
+
+/*
+variable "git_user_account" {
+  description = "An allowed list of members (users, service accounts). The signed-in identity originating the request must be a part of one of the provided members. If not specified, a request may come from any user (logged in/not logged in, etc.). Formats: user:{emailid}, serviceAccount:{emailid}"
+  type        = string
+  default     = "admin@manishkgaur.altostrat.com"
+}
+
+
+variable "git_user_name" {
+  type        = string
+  description = "User name for Git"
+  default     = "Test User"
+}
+
+variable "git_user_email" {
+  type        = string
+  description = "User email for Git"
+  default     = "test_user@example.com"
+}
+*/
+
 variable "project_name" {
   type        = string
   description = "Project ID to deploy resources"
-  default     = "csa-app-dev-3"
+  default     = "csa-app-dev-10"
 }
 
 variable "developer_service_account" {
@@ -47,18 +74,6 @@ variable "skip_delete" {
   description = " If true, the Terraform resource can be deleted without deleting the Project via the Google API."
   default     = "false"
 }
-
-
-
-variable "end_user_account" {
-  description = "An allowed list of members (users, service accounts). The signed-in identity originating the request must be a part of one of the provided members. If not specified, a request may come from any user (logged in/not logged in, etc.). Formats: user:{emailid}, serviceAccount:{emailid}"
-  type        = string
-  default     = "user:admin@manishkgaur.altostrat.com"
-}
-
-
-
-
 
 
 variable "developer_roles" {
@@ -168,190 +183,293 @@ variable "gke_subnetwork_master_cidr_range" {
 }
 
 
-
 variable "gke_cluster_name" {
   type        = string
-  description = "GKE cluster name"
+  description = "GKE_CLUSTER_NAME"
   default     = "hello-world-cluster"
 }
 
-
-variable "git_user_account" {
-  description = "An allowed list of members (users, service accounts). The signed-in identity originating the request must be a part of one of the provided members. If not specified, a request may come from any user (logged in/not logged in, etc.). Formats: user:{emailid}, serviceAccount:{emailid}"
+variable "private_pool_peering_vpc_name" {
   type        = string
-  default     = "admin@manishkgaur.altostrat.com"
+  description = "PRIVATE_POOL_PEERING_VPC_NAME"
+  default     = "hello-world-cloud-build-central-vpc"
 }
 
-variable "git_user_email" {
-  type        = string
-  description = "User email for Git"
-  default     = "test_user@example.com"
-}
 
-variable "git_user_name" {
+variable "reserved_range_name" {
   type        = string
-  description = "User name for Git"
-  default     = "Test User"
+  description = "RESERVED_RANGE_NAME"
+  default     = "private-pool-addresses"
 }
 
 
 
-
-
-/*
-# Project ID of the project containing the Private GKE Cluster
-GKE_CLUSTER_PROJECT=$PROJECT_ID
-# Private GKE Cluster for deployment
-GKE_CLUSTER_NAME=hello-world-cluster
-# VPC used for the Private GKE cluster
-VPC_NAME=hello-world-network
-
-VPC_HOST_PROJECT="$GKE_CLUSTER_PROJECT"
-VPC_HOST_PROJECT_NUMBER="$(gcloud projects describe $VPC_HOST_PROJECT --format 'value(projectNumber)')" 
-# --- End Vars for local script
-
-PRIVATE_POOL_PEERING_VPC_NAME=hello-world-cloud-build-central-vpc
-RESERVED_RANGE_NAME=private-pool-addresses
-#PRIVATE_POOL_NETWORK=192.168.16.0
-#PRIVATE_POOL_PREFIX=20
-PRIVATE_POOL_NAME=hello-world-private-pool
-REGION=us-central1
-CLUSTER_CONTROL_PLANE_CIDR=172.16.0.0/28
-
-NETWORK_1=$PRIVATE_POOL_PEERING_VPC_NAME
-NETWORK_2=$VPC_NAME
-
-GW_NAME_1=private-peer-gateway
-GW_NAME_2=gke-central-gateway
-PEER_ASN_1=65001
-PEER_ASN_2=65002
-
-IP_ADDRESS_1=169.254.2.1
-IP_ADDRESS_2=169.254.3.1
-IP_ADDRESS_3=169.254.2.2
-IP_ADDRESS_4=169.254.3.2
-
-PEER_IP_ADDRESS_1=$IP_ADDRESS_3
-PEER_IP_ADDRESS_2=$IP_ADDRESS_4
-PEER_IP_ADDRESS_3=$IP_ADDRESS_1
-PEER_IP_ADDRESS_4=$IP_ADDRESS_2
-
-ROUTER_NAME_1=cloud-build-router
-ROUTER_1_INTERFACE_NAME_0=cloud-build-interface-if0
-ROUTER_1_INTERFACE_NAME_1=cloud-build-interface-if1
-TUNNEL_NAME_GW1_IF0=gke-central-tunnel-if0
-TUNNEL_NAME_GW1_IF1=gke-central-tunnel-if1
-PEER_NAME_GW1_IF0=cloud-build-peer-if0
-PEER_NAME_GW1_IF1=cloud-build-peer-if1
-
-ROUTER_NAME_2=gke-central-router
-ROUTER_2_INTERFACE_NAME_0=gke-central-interface-if0
-ROUTER_2_INTERFACE_NAME_1=gke-central-interface-if1
-TUNNEL_NAME_GW2_IF0=cloud-build-tunnel-if0
-TUNNEL_NAME_GW2_IF1=cloud-build-tunnel-if1
-PEER_NAME_GW2_IF0=gke-central-peer-if0
-PEER_NAME_GW2_IF1=gke-central-peer-if1
-
-MASK_LENGTH=30
-SHARED_SECRET=$VPN_SHARED_SECRET
-
-
-
-
-
-variable "iam_secure_tag" {
+variable "private_pool_network" {
   type        = string
-  description = "Project ID to deploy resources"
-  default     = "hr_pplapp"
-
+  description = "PRIVATE_POOL_NETWORK"
+  default     = "192.168.16.0"
 }
 
 
-
-variable "vpc_network_name" {
+variable "private_pool_prefix" {
   type        = string
-  description = "VPC network name"
-  default     = "vpc-microseg"
-}
-
-variable "primary_network_region" {
-  type        = string
-  description = "Primary network region for micro segmentation architecture"
-  default     = "us-west1"
-}
-
-variable "primary_network_zone" {
-  type        = string
-  description = "Primary network zone"
-  default     = "us-west1-c"
-}
-
-
-variable "primary_middleware_subnetwork" {
-  type        = string
-  description = "Subnet range for primary middleware layer"
-  default     = "10.30.0.0/28"
-}
-
-
-variable "primary_sub_proxy" {
-  type        = string
-  description = "Subnet range proxy-only network for internal load balancer"
-  default     = "10.31.0.0/26"
-}
-
-variable "primary_database_subnetwork" {
-  type        = string
-  description = "Subnet range for primary middleware layer"
-  default     = "10.50.0.0"
-}
-
-
-variable "primary_ilb_ip" {
-  type        = string
-  description = "IP address for primary region internalload balancer"
-  default     = "10.30.0.10"
-}
-
-
-variable "secondary_ilb_ip" {
-  type        = string
-  description = "IP address for secondary region internal load balancer"
-  default     = "10.40.0.10"
+  description = "PRIVATE_POOL_PREFIX"
+  default     = "20"
 }
 
 
 
 
-variable "secondary_network_region" {
+variable "private_pool_name" {
   type        = string
-  description = "Secondary network region"
-  default     = "us-east1"
-}
-
-variable "secondary_network_zone" {
-  type        = string
-  description = "Secondary network zone"
-  default     = "us-east1-c"
+  description = "PRIVATE_POOL_NAME"
+  default     = "hello-world-private-pool"
 }
 
 
-
-variable "secondary_presentation_subnetwork" {
+variable "gw_name_1" {
   type        = string
-  description = "Subnet range for secondary presentation layer"
-  default     = "10.20.0.0/28"
+  description = "GW_NAME_1"
+  default     = "private-peer-gateway"
 }
 
-variable "secondary_middleware_subnetwork" {
+
+
+variable "gw_name_2" {
   type        = string
-  description = "Subnet range for secondary middleware layer"
-  default     = "10.40.0.0/28"
+  description = "GW_NAME_2"
+  default     = "gke-central-gateway"
 }
 
-variable "secondary_sub_proxy" {
-  type        = string
-  description = "Subnet range proxy-only network for internal load balancer"
-  default     = "10.41.0.0/26"
+
+
+variable "peer_asn_1" {
+  type        = number
+  description = "PEER_ASN_1"
+  default     = 65001
 }
-*/
+
+
+
+variable "peer_asn_2" {
+  type        = number
+  description = "PEER_ASN_2"
+  default     = 65002
+}
+
+
+
+variable "ip_address_1" {
+  type        = string
+  description = "PEER_IP_ADDRESS_3=$IP_ADDRESS_1"
+  default     = "169.254.2.1"
+}
+
+
+
+variable "ip_address_2" {
+  type        = string
+  description = "PEER_IP_ADDRESS_4=$IP_ADDRESS_2"
+  default     = "169.254.3.1"
+}
+
+
+
+variable "ip_address_3" {
+  type        = string
+  description = "PEER_IP_ADDRESS_1=$IP_ADDRESS_3"
+  default     = "169.254.2.2"
+}
+
+
+
+
+variable "ip_address_4" {
+  type        = string
+  description = "PEER_IP_ADDRESS_2=$IP_ADDRESS_4"
+  default     = "169.254.3.2"
+}
+
+
+
+
+variable "router_name_1" {
+  type        = string
+  description = "ROUTER_NAME_1"
+  default     = "cloud-build-router"
+}
+
+
+
+variable "router_1_interface_name_0" {
+  type        = string
+  description = "ROUTER_1_INTERFACE_NAME_0"
+  default     = "cloud-build-interface-if0"
+}
+
+
+
+variable "router_1_interface_name_1" {
+  type        = string
+  description = "ROUTER_1_INTERFACE_NAME_1"
+  default     = "cloud-build-interface-if1"
+}
+
+
+
+variable "tunnel_name_gw1_if0" {
+  type        = string
+  description = "TUNNEL_NAME_GW1_IF0"
+  default     = "gke-central-tunnel-if0"
+}
+
+
+
+variable "tunnel_name_gw1_if1" {
+  type        = string
+  description = "TUNNEL_NAME_GW1_IF1"
+  default     = "gke-central-tunnel-if1"
+}
+
+
+
+variable "peer_name_gw1_if0" {
+  type        = string
+  description = "PEER_NAME_GW1_IF0"
+  default     = "cloud-build-peer-if0"
+}
+
+
+
+variable "peer_name_gw1_if1" {
+  type        = string
+  description = "PEER_NAME_GW1_IF1"
+  default     = "cloud-build-peer-if1"
+}
+
+
+
+variable "router_name_2" {
+  type        = string
+  description = "ROUTER_NAME_2"
+  default     = "gke-central-router"
+}
+
+
+variable "router_2_interface_name_0" {
+  type        = string
+  description = "ROUTER_2_INTERFACE_NAME_0"
+  default     = "gke-central-interface-if0"
+}
+
+
+
+variable "router_2_interface_name_1" {
+  type        = string
+  description = "ROUTER_2_INTERFACE_NAME_1"
+  default     = "gke-central-interface-if1"
+}
+
+
+
+variable "tunnel_name_gw2_if0" {
+  type        = string
+  description = "TUNNEL_NAME_GW2_IF0"
+  default     = "cloud-build-tunnel-if0"
+}
+
+
+
+variable "tunnel_name_gw2_if1" {
+  type        = string
+  description = "TUNNEL_NAME_GW2_IF1"
+  default     = "cloud-build-tunnel-if1"
+}
+
+
+
+variable "peer_name_gw2_if0" {
+  type        = string
+  description = "PEER_NAME_GW2_IF0"
+  default     = "gke-central-peer-if0"
+}
+
+
+
+variable "peer_name_gw2_if1" {
+  type        = string
+  description = "PEER_NAME_GW2_IF1"
+  default     = "gke-central-peer-if1"
+}
+
+
+
+variable "mask_length" {
+  type        = number
+  description = "MASK_LENGTH"
+  default     = 30
+}
+
+
+
+variable "kms_keyring_name" {
+  type        = string
+  description = "kms keyring name"
+  default     = "hello-world-keyring1"
+}
+
+variable "kms_key_name" {
+  type        = string
+  description = "kms key name"
+  default     = "hello-world-key1"
+}
+
+variable "kms_key_version" {
+  type        = number
+  description = "kms key version"
+  default     = 1
+}
+
+variable "kms_key_purpose" {
+  type        = string
+  description = "kms key purpose"
+  default     = "ASYMMETRIC_SIGN"
+}
+
+
+variable "kms_key_algorithm" {
+  type        = string
+  description = "kms key algorithm"
+  default     = "EC_SIGN_P256_SHA256"
+}
+
+variable "kms_protection_level" {
+  type        = string
+  description = "kms protection level"
+  default     = "software"
+}
+
+
+variable "note_id" {
+  type        = string
+  description = "hello world attestor note"
+  default     = "hello-world-attestor-note"
+}
+
+variable "note_description" {
+  type        = string
+  description = "attestor note description for the spring hello world java app"
+  default     = "attestor note for the spring hello world java app"
+}
+
+variable "attestor_name" {
+  type        = string
+  description = "attestor name"
+  default     = "hello-world-attestor"
+}
+
+
+
+
+
+
