@@ -42,9 +42,7 @@ variable "end_user_account" {
 
 
 /*****************************
-RECOMMENDED DEFAULTS - DO NOT CHANGE
-
-unless you really really want to :)
+RECOMMENDED DEFAULTS - Only change if needed
 *****************************/
 
 variable "folder_name" {
@@ -118,8 +116,8 @@ variable "developer_roles" {
     "roles/ondemandscanning.admin",
     "roles/storage.objectCreator",
     "roles/storage.objectViewer",
-    "roles/containeranalysis.notes.occurrences.viewer", # For Biauth attestation
-    "roles/binaryauthorization.attestorsVerifier",      # For Biauth attestation
+    "roles/containeranalysis.notes.occurrences.viewer", # For BinAuth attestation
+    "roles/binaryauthorization.attestorsVerifier",      # For BinAuth attestation
     "roles/source.reader",
   ]
 }
