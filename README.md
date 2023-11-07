@@ -62,7 +62,7 @@ gcloud projects get-ancestors [ANY_PROJECT_ID]
 - Configuration: X mins TO BE UPDATED
 - Deployment: Y mins TO BE UPDATED
 
-## How to clean-up?
+### 5. How to clean-up?
 
 From the root folder of this repo, run the following command:
 ```
@@ -71,6 +71,7 @@ terraform destroy
 
 
 
+## Detailed Overview
 
 The infrastructure for this solution aims to create a seamless DevOps pipeline for developers, employing a range of Google Cloud Platform (GCP) services for an integrated development experience. It is designed for Google Cloud customers who operate within an organizational structure that mandates enterprise security measures. This architecture is designed with the following in mind: 
 - No internet access for resources
@@ -82,7 +83,7 @@ The infrastructure for this solution aims to create a seamless DevOps pipeline f
 
 It is recommended to coordinate with your organization's cloud security team during the deployment phase, particularly if specialized IAM permissions associated with the Compute Network Admin role are required, or if your organization has enabled the constraints/compute.restrictVpnPeerIPs Org policy.
 
-## Demo Architecture Diagram
+### Demo Architecture Diagram
 The image below describes the architecture of CSA Vertex AI Workbench demo to deploy a secure Workbench instance for development purposes.
 
 ### Application Development Process Flow Diagram
@@ -91,7 +92,7 @@ The image below describes the architecture of CSA Vertex AI Workbench demo to de
 ### Application Development Technical Architecture Diagram
 ![Architecture Diagram](./appdev-technicalarch.png)
 
-## What resources are created?
+### What resources are created?
 Components to be deployed:
 - Project
     - One Google Cloud project will be created to contain all resources within this architecture.
