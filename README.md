@@ -74,6 +74,9 @@ terraform destroy
 ## Detailed Overview
 This architecture enhances the inner and outer software development loops in Google Cloud Platform environments, while satisfying key security requirements. Automated with Terraform for minimal setup, it integrates key services like Skaffold, Jib, and Minikube within a Cloud Workstation, and services like Cloud Build, Cloud Deploy, and GKE, all under strict IAM policies and private networking. This solution streamlines development cycles and secure deployments, balancing rapid innovation with key security controls, and aligning with enterprise compliance standards.
 
+### Application Development Process Flow Diagram
+![Architecture Diagram](./appdev-flowdiagram.png)
+
 ### Terraform Deployment Overview
 The Terraform configuration for this solution facilitates the automated creation and deployment of necessary resources within the Google Cloud Platform (GCP). This approach ensures consistency, repeatability, and a high level of customization for users, aligning with enterprise-grade infrastructure standards.
 
@@ -96,9 +99,7 @@ The Terraform script is designed to deploy resources within a new folder in the 
 - Facilitates Easier Management and Tracking: Enhances the ability to manage resources and monitor usage specific to this deployment.
 - Aligns with Security and Compliance Standards: Adheres to organizational policies and governance structures.
 
-
-
-
+## Infrastructure
 The infrastructure for this solution aims to create a seamless DevOps pipeline for developers, employing a range of Google Cloud Platform (GCP) services for an integrated development experience. It is designed for Google Cloud customers who operate within an organizational structure that mandates enterprise security measures. This architecture is designed with the following in mind: 
 - No internet access for resources
 - Full compliance with commonly implemented organizational policies, including but not limited to constraints/compute.vmExternalIpAccess, constraints/compute.requireShieldedVm, and constraints/iam.disableServiceAccountKeyCreation. 
@@ -109,13 +110,7 @@ The infrastructure for this solution aims to create a seamless DevOps pipeline f
 
 It is recommended to coordinate with your organization's cloud security team during the deployment phase, particularly if specialized IAM permissions associated with the Compute Network Admin role are required, or if your organization has enabled the constraints/compute.restrictVpnPeerIPs Org policy.
 
-### Demo Architecture Diagram
-The image below describes the architecture of CSA Vertex AI Workbench demo to deploy a secure Workbench instance for development purposes.
-
-### Application Development Process Flow Diagram
-![Architecture Diagram](./appdev-flowdiagram.png)
-
-### Application Development Technical Architecture Diagram
+### Secure DevOps Infrastructure Architecture Diagram
 ![Architecture Diagram](./appdev-technicalarch.png)
 
 ### What resources are created?
@@ -125,7 +120,7 @@ Components to be deployed:
 - Region
     - By default, all resources are deployed within us-central1
 -  Service Account
-    - One service account will be created and used for access to the Assured OSS repository. This service account will be assigned project-level roles for each of the services/resources to be deployed and managed. These roles are assigned using a least-privilege model.
+    - A service account will be created for access to the Assured OSS repository. This service account will be assigned project-level roles for access to each of the services and resources to be deployed and managed. These roles will be assigned using a least-privilege model.
     - Additionally, Cloud Deploy uses the default service compute service account for operations. This service account will be assigned additional roles to accommodate Cloud Build, Artifact Registry, Cloud Logging, and Cloud Storage operations, also using a least-privilege model.
 - Cloud DNS
     - This solution enables Private Google Access to allow communication between Google Cloud services and resources within the project, without requiring internet access. Private Google Access requires DNS records to return IP addresses within the private.googleapis.com VIP for the desired Google service domains. These records will need to be created for the services included in this solution, including:
@@ -133,19 +128,22 @@ Components to be deployed:
         - *.gcr.io
         - *.source.developers.google.com
         -  *.pkg.dev
-    - Additionally, a private zone containing one A record is created for the private Cloud Workstation cluster communication with the google-managed private gateway via Private Service Connect endpoint.
 - VPC & Subnets
-    - This solution uses two VPCs in total. A second VPC (VPC 2: hello-world-cloud-build-central-vpc) is connected to the primary VPC (VPC 1: hello-world-network) via VPN to provide connectivity between the Cloud Build private worker pool and the GKE control plane. The Cloud Build private worker pool and the GKE control plane are placed in separate Google-managed VPCs that are peered to the customer's VPC. This two-VPC design is necessary because the services cannot communicate directly with one another via a single customer VPC due to transitive peering restrictions.
-- VPC 1 (hello-world-network) contains:
-    - One primary subnet to host the Cloud Workstation instances and the GKE instances, with Private Google Access enabled.
-    - Two secondary subnets for the GKE pods and services, respectively.
-    - One Private Service Connect endpoint for Cloud Workstation communication to a Google-managed private gateway.
-    - One VPC Peering to a Google-managed VPC, also called Service Networking, that contains the GKE control plane.
-    - One HA VPN Gateway pair for connectivity to VPC 2. This includes two Cloud Routers to exchange routes between the VPCs via BGP.
-    - Default firewall rules
-- VPC 2 (hello-world-cloud-build-central-vpc) contains:
-    - One VPC Peering to a Google-managed VPC, also called Service Networking, that contains the Cloud Build private pool.
-    - One HA VPN Gateway pair for connectivity to VPC 1. This includes two Cloud Routers to exchange routes between the VPCs via BGP.
+  This solution uses two VPCs.
+    - VPC 1 (hello-world-network):
+        - One primary subnet to host the Cloud Workstation instances and the GKE instances, with Private Google Access enabled.
+        - Two secondary subnets for the GKE pods and services, respectively.
+        - One Private Service Connect endpoint for Cloud Workstation communication to a Google-managed private gateway.
+        - One VPC Peering to a Google-managed VPC, also called Service Networking, that contains the GKE control plane.
+        - One HA VPN Gateway pair for connectivity to VPC 2. This includes two Cloud Routers to exchange routes between the VPCs via BGP.
+        - Default firewall rules
+    - VPC 2 (hello-world-cloud-build-central-vpc):
+        - One VPC Peering to a Google-managed VPC, also called Service Networking, that contains the Cloud Build private pool.
+        - One HA VPN Gateway pair for connectivity to VPC 1. This includes two Cloud Routers to exchange routes between the VPCs via BGP.
+
+The Cloud Build private worker pool and the GKE control plane are placed in separate Google-managed VPCs that are peered to the customer's VPC.
+This two-VPC design is necessary because the services cannot communicate directly with one another via a single customer VPC due to transitive peering restrictions.
+  
 - Cloud Workstation
     - One workstation cluster using the primary subnet in VPC 1
     - Private endpoint enabled, to ensure only private access to the workstations.
