@@ -81,5 +81,7 @@ kms_protection_level = var.kms_protection_level
 note_id = var.note_id
 note_description = var.note_description
 attestor_name = var.attestor_name
+folder_name = var.folder_name
+workstation_private_config = var.workstation_private_config
 }
 
