@@ -16,6 +16,11 @@
 ##  This code creates demo environment for CSA - Application Development Architecture Pattern   ##
 ##  This demo code is not built for production workload ##
 
+# set specific variables here for your own deployment
+
+/******************************
+    REQUIRED TO CHANGE
+******************************/
 
 variable "organization_id" {
   type        = string
@@ -34,6 +39,20 @@ variable "end_user_account" {
   type        = string
   default     = "user:USER@DOMAIN.com"
 }
+
+
+/*****************************
+RECOMMENDED DEFAULTS - DO NOT CHANGE
+
+unless you really really want to :)
+*****************************/
+
+variable "folder_name" {
+  type        = string
+  default     = "CSA-AppDev"
+  description = "A folder to create this project under. If none is provided, the project will be created under the organization"
+}
+
 
 variable "workstation_private_config" {
   description = "An allowed list of members (users, service accounts). The signed-in identity originating the request must be a part of one of the provided members. If not specified, a request may come from any user (logged in/not logged in, etc.). Formats: user:{emailid}, serviceAccount:{emailid}"
