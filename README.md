@@ -55,12 +55,42 @@ To find your organization id, run the following command:
 gcloud projects get-ancestors [ANY_PROJECT_ID]
 ```
 
-
 **Note:** All the other variables are given a default value. If you wish to change, update the corresponding variables in the variable.tf file.
 
-### 4. Deployment Duration
-- Configuration: X mins TO BE UPDATED
-- Deployment: Y mins TO BE UPDATED
+### 4: Use Your Secure Development Environment
+
+1. Open the Google Cloud Console through a web browser and navigate to the [Cloud Workstations page](https://console.cloud.google.com/workstations/list)
+2. Navigate to you Cloud Workstation (named 'hello-world-worksation' be default) and click the 'Launch' button. Note: If you see the 'Start' button instead of 'Launch', click the 'Start' button and then click the 'Launch' button once it becomes available.
+    * <img alt="Workstation File Menu GUI" src="https://github.com/mgaur10/appmod-temp/assets/38972/61aac3fa-f492-41e0-82f8-91d4e4b4b79c" width=300>
+
+4. You should now be in a new browser tab viewing your 'Code OSS' IDE.
+    * <img alt="Code OSS IDE" src="https://github.com/mgaur10/appmod-temp/assets/38972/e65eab05-9642-4b74-890b-0ad6daf517db" width=600>
+
+5. Click the menu 'File -> Open Folder -> hello_word_java' to open your Java Sample Application project directory
+    * <img alt="Code OSS IDE" src="https://github.com/mgaur10/appmod-temp/assets/38972/d618f3c3-4cad-4547-bc20-69d20593070f" width=600>
+
+7. Click the menu 'Terminal -> New Terminal'
+    * <img alt="Code OSS IDE" src="https://github.com/mgaur10/appmod-temp/assets/38972/7bbf23b9-c95f-4d3c-a24c-31efd46abc9e" width=600>
+
+8. You should see messages about Maven installation, Minikube starting, and Skaffold starting
+10. Authorize your end-user account to the Workstation 'gcloud' cli in the terminal: `gcloud auth login`, and follow the steps to sign in.
+11. Verify that the sample application is running and responding to requests
+    * View the Skaffold logs and ensure that the service is running: `tail -f /var/log/skaffold.log` 
+    * You should see a similar message towards the end of the logs: "Started HelloWorldApplication in 3.195 seconds"
+    * Send a request to the Java application from the Cloud Workstation terminal to the Minikube cluster: `curl http://localhost:9000`. 
+    * NOTE: Skaffold is configured to forward port 9000 to your local Minikube k8s service. You may also click the hyperlink generated in your Cloud Workstation terminal from the 'http://localhost:9000' and view the application response in your web browser.
+12. Make a code change, commit, and push to the remote repository
+    * Open 'src/main/java/com/example/helloWorld/HelloWorldApplication.java' in your Cloud Workstation IDE and change the "Hello World" string to something different.
+13. Commit and push your changes to the remote repository: `git add src && git commit -m "first custom commit" && git push`.
+    * Note: Your repository is configured to use your 'gcloud' credentials to authenticate with the remote Cloud Source Repository. If there is an authentication problem, you may have forgotten to run `gcloud auth login` as described above.
+14. Navigate to Cloud Build and verify that your 'Outer Dev Loop' build pipeline has completed successfully.
+    * <img alt="Code Build History Page" src="https://github.com/mgaur10/appmod-temp/assets/38972/6e2a31f2-8bc9-4b64-90be-4d65edc2a2b3" width=600>
+  * NOTE: There will be a total of 4 Builds that need to be successful: 1 that is declared in your Cloud Build Trigger (cloudbuild-launcher.yaml), 1 that is submitted by Build that ran through Cloud Build Trigger (cloudbuild.yaml), 2 that are submitted automatically by Cloud Deploy for your new release (that call the skaffold 'render' and 'deploy' stages).
+16. When the Cloud Build steps have completed successfully, validate that your application can receive requests from your Cloud Workstations.
+    * Set your k8s configuration to reference your remote GKE Cluster: `gcloud container clusters get-credentials hello-world-cluster --region us-central1`
+    * Open a tunnel via port-forwarding from your Cloud Workstation to your GKE Service: `kubectl port-forward services/spring-java-hello-world-service 9090:8080`
+    * Send a request to the Java application from the Cloud Workstation terminal to the Minikube cluster: `curl http://localhost:9090`.  You may also click the hyperlink generated in your Cloud Workstation terminal from the 'http://localhost:9090' and view the application response in your web browser.
+17. When finishing testing your remote cluster, set your local k8s configuration back to Minikube for further dev work: `kubectl config use-context minikube`
 
 ### 5. How to clean-up?
 
@@ -69,6 +99,9 @@ From the root folder of this repo, run the following command:
 terraform destroy
 ```
 
+### 6. Deployment Duration
+- Configuration: X mins TO BE UPDATED
+- Deployment: Y mins TO BE UPDATED
 
 
 ## Detailed Overview
@@ -179,45 +212,6 @@ To deploy this blueprint you must have an active billing account and billing per
 3. Architecture description step no. N
 
 ## Documentation
-
-TODO: Insert documentation for all steps up to 'terraform apply'
-
-You may now begin to use your Secure Development Environment
-
-1. Open the Google Cloud Console through a web browser and navigate to the [Cloud Workstations page](https://console.cloud.google.com/workstations/list)
-2. Navigate to you Cloud Workstation (named 'hello-world-worksation' be default) and click the 'Launch' button. Note: If you see the 'Start' button instead of 'Launch', click the 'Start' button and then click the 'Launch' button once it becomes available.
-    * <img alt="Workstation File Menu GUI" src="https://github.com/mgaur10/appmod-temp/assets/38972/61aac3fa-f492-41e0-82f8-91d4e4b4b79c" width=300>
-
-4. You should now be in a new browser tab viewing your 'Code OSS' IDE.
-    * <img alt="Code OSS IDE" src="https://github.com/mgaur10/appmod-temp/assets/38972/e65eab05-9642-4b74-890b-0ad6daf517db" width=600>
-
-5. Click the menu 'File -> Open Folder -> hello_word_java' to open your Java Sample Application project directory
-    * <img alt="Code OSS IDE" src="https://github.com/mgaur10/appmod-temp/assets/38972/d618f3c3-4cad-4547-bc20-69d20593070f" width=600>
-
-7. Click the menu 'Terminal -> New Terminal'
-    * <img alt="Code OSS IDE" src="https://github.com/mgaur10/appmod-temp/assets/38972/7bbf23b9-c95f-4d3c-a24c-31efd46abc9e" width=600>
-
-8. You should see messages about Maven installation, Minikube starting, and Skaffold starting
-10. Authorize your end-user account to the Workstation 'gcloud' cli in the terminal: `gcloud auth login`, and follow the steps to sign in.
-11. Verify that the sample application is running and responding to requests
-    * View the Skaffold logs and ensure that the service is running: `tail -f /var/log/skaffold.log` 
-    * You should see a similar message towards the end of the logs: "Started HelloWorldApplication in 3.195 seconds"
-    * Send a request to the Java application from the Cloud Workstation terminal to the Minikube cluster: `curl http://localhost:9000`. 
-    * NOTE: Skaffold is configured to forward port 9000 to your local Minikube k8s service. You may also click the hyperlink generated in your Cloud Workstation terminal from the 'http://localhost:9000' and view the application response in your web browser.
-12. Make a code change, commit, and push to the remote repository
-    * Open 'src/main/java/com/example/helloWorld/HelloWorldApplication.java' in your Cloud Workstation IDE and change the "Hello World" string to something different.
-13. Commit and push your changes to the remote repository: `git add src && git commit -m "first custom commit" && git push`.
-    * Note: Your repository is configured to use your 'gcloud' credentials to authenticate with the remote Cloud Source Repository. If there is an authentication problem, you may have forgotten to run `gcloud auth login` as described above.
-14. Navigate to Cloud Build and verify that your 'Outer Dev Loop' build pipeline has completed successfully.
-    * <img alt="Code Build History Page" src="https://github.com/mgaur10/appmod-temp/assets/38972/6e2a31f2-8bc9-4b64-90be-4d65edc2a2b3" width=600>
-  * NOTE: There will be a total of 4 Builds that need to be successful: 1 that is declared in your Cloud Build Trigger (cloudbuild-launcher.yaml), 1 that is submitted by Build that ran through Cloud Build Trigger (cloudbuild.yaml), 2 that are submitted automatically by Cloud Deploy for your new release (that call the skaffold 'render' and 'deploy' stages).
-16. When the Cloud Build steps have completed successfully, validate that your application can receive requests from your Cloud Workstations.
-    * Set your k8s configuration to reference your remote GKE Cluster: `gcloud container clusters get-credentials hello-world-cluster --region us-central1`
-    * Open a tunnel via port-forwarding from your Cloud Workstation to your GKE Service: `kubectl port-forward services/spring-java-hello-world-service 9090:8080`
-    * Send a request to the Java application from the Cloud Workstation terminal to the Minikube cluster: `curl http://localhost:9090`.  You may also click the hyperlink generated in your Cloud Workstation terminal from the 'http://localhost:9090' and view the application response in your web browser.
-17. When finishing testing your remote cluster, set your local k8s configuration back to Minikube for further dev work: `kubectl config use-context minikube`
-
-
 
 ## Cost
 [Blueprint cost details](https://cloud.google.com/products/calculator?id=02fb0c45-cc29-4567-8cc6-f72ac9024add)
