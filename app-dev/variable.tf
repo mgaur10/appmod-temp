@@ -47,6 +47,11 @@ variable "skip_delete" {
 
 }
 
+variable "workstation_image" {
+  description = "The predefined container image to run on the Cloud Workstation. Options are: base-image, clion, codeoss, goland, intellij, phpstorm, pycharm, rider, rubymine, webstorm"
+  type        = string
+}
+
 variable "workstation_private_config" {
   description = "An allowed list of members (users, service accounts). The signed-in identity originating the request must be a part of one of the provided members. If not specified, a request may come from any user (logged in/not logged in, etc.). Formats: user:{emailid}, serviceAccount:{emailid}"
   type        = bool
