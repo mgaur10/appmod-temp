@@ -17,10 +17,21 @@
 ##  This demo code is not built for production workload ##
 
 
-output "_step1_follow_the_steps_to_register_service_account_for_Assured_OSS" {
+output "step1_follow_the_steps_to_register_service_account_for_Assured_OSS" {
   value     = module.app-dev._step1_follow_the_steps_to_register_service_account_for_OSS
 }
 
-output "_step2_register_the_service_account_for_Assured_OSS" {
+
+output "step2_register_the_service_account_for_Assured_OSS" {
   value     = module.app-dev._step2_register_the_service_account_for_OSS
+}
+
+
+output "step3_execute_the_command_toget_workstation_HTTP_URL" {
+  value = module.app-dev._step3_execute_the_command_toget_workstation_HTTP_URL
+}
+
+
+output "step4_workstation_https_access" {
+  value = module.app-dev._step4_workstation_https_access
 }
