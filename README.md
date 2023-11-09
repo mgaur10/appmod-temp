@@ -44,7 +44,11 @@ From the root folder of this repo, run the following commands:
 ```
 export TF_VAR_organization_id=[YOUR_ORGANIZATION_ID]
 export TF_VAR_billing_account=[YOUR_BILLING_ID]
+# NOTE: make sure to keep the 'user:' prefix before the email address 
 export TF_VAR_end_user_account=["user:USERNAME@DOMAIN.com"]
+# OPTIONAL: choose a different Workstation container image for your Cloud Workstation (default is the codeoss image): https://cloud.google.com/workstations/docs/preconfigured-base-images
+# export TF_VAR_workstation_image="us-central1-docker.pkg.dev/cloud-workstations-images/predefined/intellij-ultimate:latest"
+
 terraform init
 terraform apply
 terraform apply --refresh-only
