@@ -47,6 +47,11 @@ variable "skip_delete" {
 
 }
 
+variable "workstation_image" {
+  description = "The predefined container image to run on the Cloud Workstation. Options are listed here: https://cloud.google.com/workstations/docs/preconfigured-base-images#list_of_preconfigured_base_images"
+  type        = string
+}
+
 variable "workstation_private_config" {
   description = "An allowed list of members (users, service accounts). The signed-in identity originating the request must be a part of one of the provided members. If not specified, a request may come from any user (logged in/not logged in, etc.). Formats: user:{emailid}, serviceAccount:{emailid}"
   type        = bool

@@ -111,6 +111,10 @@ resource "google_workstations_workstation_config" "workstation_cluster_config" {
     }
   }
 
+  container {
+    image = var.workstation_image
+  }
+
   depends_on = [
     google_workstations_workstation_cluster.workstation_cluster,
     google_service_account.developer_service_account
