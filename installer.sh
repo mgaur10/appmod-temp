@@ -129,12 +129,18 @@ while ! nc -z localhost $TUNNEL_PORT; do
 done
 echo "tunnel opened"
 
-scp -P $TUNNEL_PORT -o "StrictHostKeyChecking no" -r "${CLOUD_SOURCE_REPOSITORY_DIR}" "user@localhost:"
-scp -P $TUNNEL_PORT -o "StrictHostKeyChecking no" -r "${CONFIG_DIR}/.m2" "user@localhost:"
-scp -P $TUNNEL_PORT -o "StrictHostKeyChecking no" "${CONFIG_DIR}/.hello-world-dev-config" "user@localhost:"
-ssh -p $TUNNEL_PORT -o "StrictHostKeyChecking no" "user@localhost" "echo \"source ~/.hello-world-dev-config $SERVICE_ACCOUNT $PROJECT_HOME\" >> ~/.bashrc"
-ssh -p $TUNNEL_PORT -o "StrictHostKeyChecking no" "user@localhost" "git config --global user.email \"${USER_EMAIL}\""
-ssh -p $TUNNEL_PORT -o "StrictHostKeyChecking no" "user@localhost" "git config --global user.name \"${USER_NAME}\""
+CONFIGURE_WORKSTATION_ENV=$(ssh -p $TUNNEL_PORT -o "StrictHostKeyChecking no" "user@localhost" "test -d ${USER_SOURCE_REPO_NAME}; echo \$?")
+
+if [ $CONFIGURE_WORKSTATION_ENV -ne "0" ]; then
+  scp -P $TUNNEL_PORT -o "StrictHostKeyChecking no" -r "${CLOUD_SOURCE_REPOSITORY_DIR}" "user@localhost:"
+  scp -P $TUNNEL_PORT -o "StrictHostKeyChecking no" -r "${CONFIG_DIR}/.m2" "user@localhost:"
+  scp -P $TUNNEL_PORT -o "StrictHostKeyChecking no" "${CONFIG_DIR}/.hello-world-dev-config" "user@localhost:"
+  ssh -p $TUNNEL_PORT -o "StrictHostKeyChecking no" "user@localhost" "echo \"source ~/.hello-world-dev-config $SERVICE_ACCOUNT $PROJECT_HOME\" >> ~/.bashrc"
+  ssh -p $TUNNEL_PORT -o "StrictHostKeyChecking no" "user@localhost" "git config --global user.email \"${USER_EMAIL}\""
+  ssh -p $TUNNEL_PORT -o "StrictHostKeyChecking no" "user@localhost" "git config --global user.name \"${USER_NAME}\""
+else
+  echo "Skipping Workstation Environment configuration because the Workstation source directory already exists: ~/${USER_SOURCE_REPO_NAME}"
+fi
 
 # kill TCP tunnel to Cloud Workstation
 kill $TUNNEL_PID 
