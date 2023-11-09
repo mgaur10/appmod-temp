@@ -52,9 +52,9 @@ variable "folder_name" {
 }
 
 variable "workstation_image" {
-  description = "The predefined container image to run on the Cloud Workstation. Options are: base-image, clion, codeoss, goland, intellij, phpstorm, pycharm, rider, rubymine, webstorm"
+  description = "The predefined container image to run on the Cloud Workstation. Options are listed here: https://cloud.google.com/workstations/docs/preconfigured-base-images#list_of_preconfigured_base_images"
   type        = string
-  default     = "codeoss"
+  default     = "us-central1-docker.pkg.dev/cloud-workstations-images/predefined/code-oss:latest"
 }
 
 variable "workstation_private_config" {

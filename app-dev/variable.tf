@@ -48,7 +48,7 @@ variable "skip_delete" {
 }
 
 variable "workstation_image" {
-  description = "The predefined container image to run on the Cloud Workstation. Options are: base-image, clion, codeoss, goland, intellij, phpstorm, pycharm, rider, rubymine, webstorm"
+  description = "The predefined container image to run on the Cloud Workstation. Options are listed here: https://cloud.google.com/workstations/docs/preconfigured-base-images#list_of_preconfigured_base_images"
   type        = string
 }
 
