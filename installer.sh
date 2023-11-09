@@ -120,7 +120,11 @@ gcloud beta workstations start-tcp-tunnel $CLOUD_WORKSTATION_NAME 22 \
 echo "waiting for tunnel to open.."
 TUNNEL_PID="$(jobs -l | tail -n1 | awk '{print $2}')"
 
-while ! nc -z localhost $TUNNEL_PORT; do   
+while ! nc -z localhost $TUNNEL_PORT; do
+  if ! ps -p $TUNNEL_PID; then
+    echo "Failed to Open Tunnel.. Existing installer.sh"
+    exit 1
+  fi
   sleep 0.1
 done
 echo "tunnel opened"
