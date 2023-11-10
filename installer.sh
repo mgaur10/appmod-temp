@@ -29,6 +29,11 @@ CLOUD_WORKSTATION_CONFIG="$CLOUD_WORKSTATION_CONFIG"
 
 CLOUD_SOURCE_REPOSITORY_DIR="${USER_SOURCE_REPO_LOCAL_DIR}/${USER_SOURCE_REPO_NAME}"
 
+if ! command -v jq &> /dev/null
+then
+  sudo apt-get install jq -y -q
+fi
+
 # Set programatically for git config
 TOKEN=$(curl http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token -H Metadata-Flavor:Google | jq -r '.access_token')
 USER_EMAIL=$(curl "https://oauth2.googleapis.com/tokeninfo?access_token=$TOKEN" | jq -r '.email')
