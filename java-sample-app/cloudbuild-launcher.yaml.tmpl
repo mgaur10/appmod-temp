@@ -7,7 +7,8 @@ substitutions:
   _WORKER_SERVICE_ACCOUNT: "$SERVICE_ACCOUNT"
 
 steps:
-- name: gcr.io/cloud-builders/gcloud
+- id: 'launch-build'
+  name: gcr.io/cloud-builders/gcloud
   entrypoint: bash
   args:
   - '-eo'
@@ -17,23 +18,14 @@ steps:
     curl -Lo "/tmp/skaffold" '${_SKAFFOLD_URL}' &&
     install /tmp/skaffold /usr/bin &&
     skaffold build --dry-run -q &&
-    IMAGE_NAME_AND_TAGS="$(skaffold build --dry-run -q | grep --color=never -oP '(?<="tag":")[^"]*' | tr '\n' '|' | sed -e 's/|$//g')" &&
-    IFS='|' read -r -a IMAGE_NAME_AND_TAGS_ARRAY <<< "$${IMAGE_NAME_AND_TAGS}" &&
-    echo "$${IMAGE_NAME_AND_TAGS_ARRAY[@]}" &&
-    IMAGES=() &&
-    COUNT=0 &&
-    for IMG_NAME_AND_TAG in "$${IMAGE_NAME_AND_TAGS_ARRAY[@]}"; do
-
-    IMAGES[$${COUNT}]="${_DOCKER_REPO_URL}/$${IMG_NAME_AND_TAG}" &&
-    COUNT=$$((COUNT+1))
-
-    done &&
-
+    ARTIFACT_TAGS="$(skaffold build --dry-run -q | grep --color=never -oP '(?<="tag":")[^"]*' | tr '\n' '|' | sed -e 's/|$//g')" &&
+    IFS='|' read -r -a ARTIFACT_TAGS_ARRAY <<< "$${ARTIFACT_TAGS}" &&
     cp cloudbuild.yaml /tmp/cloudbuild-rendered.yaml &&
     sed -z -E "s/(images\:[^-]*).*\"/\1/g" -i /tmp/cloudbuild-rendered.yaml &&
 
-    for IMAGE in "$${IMAGES[@]}"; do
+    for ARTIFACT_TAG in "$${ARTIFACT_TAGS_ARRAY[@]}"; do
 
+    IMAGE="${_DOCKER_REPO_URL}/$${ARTIFACT_TAG}" &&
     IMAGE_ESCAPED=$(echo "$${IMAGE}" | sed -E 's/\//\\\//g') &&
     sed -E "s/(images\:)/\1\n- $${IMAGE_ESCAPED}/g" -i /tmp/cloudbuild-rendered.yaml
 
@@ -41,7 +33,7 @@ steps:
 
     gcloud builds submit "${_REPO_URL}" 
     --git-source-revision=${COMMIT_SHA}
-    --substitutions=_IMAGE_NAME_AND_TAGS="$${IMAGE_NAME_AND_TAGS}"
+    --substitutions=_ARTIFACT_TAGS="$${ARTIFACT_TAGS}"
     --region=${LOCATION}
     --config=/tmp/cloudbuild-rendered.yaml
     --async
