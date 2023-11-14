@@ -44,7 +44,7 @@ export TF_VAR_billing_account="YOUR_BILLING_ID"
 export TF_VAR_end_user_account="user:USERNAME@DOMAIN.com"
 ```
 
-Optionally configure Terraform to deploy a different Cloud Workstation IDE than OSS Code:
+Optionally configure Terraform to deploy a different Cloud Workstation IDE than Code OSS:
 ```BASH
 # choose a different Workstation container image for your Cloud Workstation (default is the codeoss image):
 # https://cloud.google.com/workstations/docs/preconfigured-base-images
