@@ -25,7 +25,7 @@ resource "random_id" "random_suffix" {
 
 # Create Folder in GCP Organization
 resource "google_folder" "app_dev" {
-  display_name = var.folder_name
+  display_name = "${var.folder_name}-${random_id.random_suffix.hex}"
   parent       = "organizations/${var.organization_id}"
 }
 
