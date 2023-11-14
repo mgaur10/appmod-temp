@@ -10,14 +10,10 @@ This demo uses Terraform to setup the Secure DevOps Architecture in a single fol
 [Cloud Key Management](https://cloud.google.com/kms), [Compute Engine](https://cloud.google.com/compute), [GKE](https://cloud.google.com/containers), [Datastore](https://cloud.google.com/datastore), [Cloud DNS](https://cloud.google.com/dns), [Cloud Logging](https://cloud.google.com/logging), [Storage](https://cloud.google.com/storage) and [Cloud Workstations](https://cloud.google.com/workstations). 
 
 ## How to deploy?
-The following steps should be executed in Cloud Shell in the Google Cloud Console. Ensure no project is set in cloud shell. To unset a project use the command below.
-
-```
-gcloud config unset project
-```
+The following steps should be executed in Cloud Shell in the Google Cloud Console.
 
 ### 1. IAM Permission 
-Grant the user running the Terraform below roles.
+Grant the user running the Terraform below roles. The user may be your end user account. If you are already the "Project Owner" role then you have nothing to do here.
 ```
 TO BE UPDATED
 Billing Account User
@@ -31,7 +27,7 @@ DNS Administrator
 ### 2. Get the code
 Clone the GitHub repository and navigate to the root of the repository.
 
-``` 
+```BASH
 git clone https://github.com/GCP-Architecture-Guides/CSA-App-Dev.git
 cd CSA-App-Dev
 ```
@@ -39,27 +35,32 @@ cd CSA-App-Dev
 ### 3. Deploy the infrastructure using Terraform
 
 
-From the root folder of this repo, run the following commands:
+From the root folder of this repo, run the following commands to configure Terraform:
 
-```
-export TF_VAR_organization_id=[YOUR_ORGANIZATION_ID]
-export TF_VAR_billing_account=[YOUR_BILLING_ID]
+```BASH
+export TF_VAR_organization_id="YOUR_ORGANIZATION_ID"
+export TF_VAR_billing_account="YOUR_BILLING_ID"
 # NOTE: make sure to keep the 'user:' prefix before the email address 
-export TF_VAR_end_user_account=["user:USERNAME@DOMAIN.com"]
-# OPTIONAL: choose a different Workstation container image for your Cloud Workstation (default is the codeoss image): https://cloud.google.com/workstations/docs/preconfigured-base-images
-# export TF_VAR_workstation_image="us-central1-docker.pkg.dev/cloud-workstations-images/predefined/intellij-ultimate:latest"
+export TF_VAR_end_user_account="user:USERNAME@DOMAIN.com"
+```
 
+Optionally configure Terraform to deploy a different Cloud Workstation IDE than OSS Code:
+```BASH
+# choose a different Workstation container image for your Cloud Workstation (default is the codeoss image):
+# https://cloud.google.com/workstations/docs/preconfigured-base-images
+export TF_VAR_workstation_image="us-central1-docker.pkg.dev/cloud-workstations-images/predefined/intellij-ultimate:latest"
+```
+
+**Note:** All the other variables are given a default value. If you wish to change, update the corresponding variables in the variable.tf file.
+
+
+Init and Apply The Terraform project (takes ~25 minutes to complete) 
+```BASH
+gcloud config unset project
 terraform init
 terraform apply
 terraform apply --refresh-only
 ```
-
-To find your organization id, run the following command: 
-```
-gcloud projects get-ancestors [ANY_PROJECT_ID]
-```
-
-**Note:** All the other variables are given a default value. If you wish to change, update the corresponding variables in the variable.tf file.
 
 ### 4: Use Your Secure Development Environment
 
