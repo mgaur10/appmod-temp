@@ -17,10 +17,10 @@ Grant the user running the Terraform below roles. The user may be your end user 
 ```
 TO BE UPDATED
 Billing Account User
-Organization Policy Administrator
-Folder Creator
-Project Creator
 DNS Administrator
+Folder Creator
+Organization Policy Administrator
+Project Creator
 ```
 
 
@@ -105,8 +105,8 @@ terraform destroy
 ```
 
 ### 6. Deployment Duration
-- Configuration: X mins TO BE UPDATED
-- Deployment: Y mins TO BE UPDATED
+- Configuration: 2-3 mins (approx.)
+- Deployment: 20-25 mins (approx.)
 
 
 ## Detailed Overview
