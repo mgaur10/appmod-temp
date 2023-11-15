@@ -36,10 +36,9 @@ steps:
   - '-ex'
   - '-c'
   - |
-    apt-get install netcat jq gettext-base procps -q -y
+    apt-get install netcat jq gettext-base procps unzip -q -y
 
     curl https://releases.hashicorp.com/terraform/1.6.3/terraform_1.6.3_linux_amd64.zip > terraform_1.6.3_linux_amd64.zip
-    apt-get install unzip
     unzip terraform_1.6.3_linux_amd64.zip
     mv terraform /usr/bin
 
