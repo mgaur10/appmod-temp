@@ -11,7 +11,7 @@ public class HelloWorldApplication {
 
     @GetMapping("/")
     String home() {
-        return "Hello World Java 7!";
+        return "Hello World CSA AppDevSec!";
     }
 
 	public static void main(String[] args) {

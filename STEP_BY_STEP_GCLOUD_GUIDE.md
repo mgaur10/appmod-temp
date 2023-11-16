@@ -376,15 +376,15 @@ git config --global user.name "[YOUR_NAME]"
 
 3. Clone the copy over base files from the spring-java-hello-world base project 
 ```BASH
-#NOTE: We'll need to find a more permenant GCP project or other Git repository
-gcloud source repos clone springboard-java-hello-world --project springboard-dev-env
+# TODO: We'll need to find a more permenant GCP project or other Git repository
+gcloud source repos clone spring-java-hello-world
 pushd .
-  cd springboard-java-hello-world
+  cd spring-java-hello-world
   git checkout main
 popd
-cp -r springboard-java-hello-world/* \
-      springboard-java-hello-world/.mvn \
-      springboard-java-hello-world/.gitignore \
+cp -r spring-java-hello-world/* \
+      spring-java-hello-world/.mvn \
+      spring-java-hello-world/.gitignore \
       hello-world-java/
 
 cd hello-world-java
@@ -499,14 +499,6 @@ If separation of duties and additional organization is needed, it is best to iso
 1. Create or use an existing VPC with a Subnet for the GKE Cluster 
 
 2. Create a private GKE cluster using the VPC and Subnet created in the last step.
-
-3. Note for Argolis users:
-
-You will first need to override the default 'denyAll' policy and change it ot 'allowAll' for the following constraint:
-
-```
-constraints/compute.restrictVpnPeerIPs
-```
 
 #### Steps
 
