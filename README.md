@@ -13,7 +13,8 @@ This demo uses Terraform to setup the Secure DevOps Architecture in a single fol
 The following steps should be executed in Cloud Shell in the Google Cloud Console.
 
 ### 1. IAM Permission 
-Grant the user running the Terraform below roles. The user may be your end user account. If you are already the "Project Owner" role then you have nothing to do here.
+Grant the user running the Terraform below roles on your Oraganization. The user may be your end user account.
+
 ```
 Billing Account User
 DNS Administrator
@@ -22,6 +23,7 @@ Organization Policy Administrator
 Project Creator
 ```
 
+<img alt="Required IAM Organization Policies" src="https://github.com/mgaur10/appmod-temp/assets/38972/59ad864e-bf76-433c-89e7-22f8aba84ce7" width="600"/>
 
 ### 2. Get the code
 Clone the GitHub repository and navigate to the root of the repository.
@@ -33,6 +35,15 @@ cd CSA-App-Dev
 
 ### 3. Deploy the infrastructure using Terraform
 
+You will need to configure your preferred Organization ID, Billing Account ID, and end user account name. You may configuration your end user (login) account for this purpose.
+
+To find your Organization ID, you may use the Cloud Console to open the project selector and copy your Organization ID:
+
+<img alt="Organization ID in GUI" src="https://github.com/mgaur10/appmod-temp/assets/38972/f729e791-5777-4614-85e2-2b5e38fe2c3c" width="600"/>
+
+To find you Billing Account ID, you may use the Cloud Console to navigate to the "Billing Acccounts" page and copy your Billing ID:
+
+<img alt="Billing ID in GUI" src="https://github.com/mgaur10/appmod-temp/assets/38972/df294c6b-ab98-4056-b492-7c5bc10dd2f9" width="600"/>
 
 From the root folder of this repo, run the following commands to configure Terraform:
 
