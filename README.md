@@ -15,7 +15,6 @@ The following steps should be executed in Cloud Shell in the Google Cloud Consol
 ### 1. IAM Permission 
 Grant the user running the Terraform below roles. The user may be your end user account. If you are already the "Project Owner" role then you have nothing to do here.
 ```
-TO BE UPDATED
 Billing Account User
 DNS Administrator
 Folder Creator
