@@ -58,7 +58,7 @@ Organization Policy Administrator
 Project Creator
 ```
 
-<img alt="Required IAM Organization Policies" src="https://github.com/mgaur10/appmod-temp/assets/38972/59ad864e-bf76-433c-89e7-22f8aba84ce7" width="600"/>
+<img alt="Required IAM Organization Policies" src="https://github.com/mgaur10/appmod-temp/assets/38972/4f2cbcd2-47e1-4742-8400-16672c54836a" width="600"/>
 
 ### 2. Get the code
 Clone the GitHub repository and navigate to the root of the repository.
