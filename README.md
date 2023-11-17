@@ -262,6 +262,21 @@ The resources/services/activations/deletions that this module will create/trigge
 
 - Create a GCS bucket with the provided name
 
+# Cost
+
+Please see the estimated monthly cost to run this demonstration environment, below. Note, this has been estimated at the time of pattern creation, the estimate may change with time and may vary per region, please review the cost of each resource at [Google Cloud Pricing Calculator](https://cloud.google.com/products/calculator).
+
+Service | Daily Cost USD | Monthly Cost USD (30 days)
+------- | -------------- | --------------------------
+Networking | $5.04 | $151.20
+Cloud Workstations | $4.80 | $144.00
+Cloud DNS | $0.03 | $0.90
+Cloud Key Management Service (KMS) | $0.00 | $0.00
+Kubernetes Engine | $2.40 | $72.00
+
+**Total Monthly Cost** | | **$368.10**
+
+
 ## Contributing
 
 Refer to the [contribution guidelines](./CONTRIBUTING.md) for
