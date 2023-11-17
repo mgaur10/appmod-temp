@@ -1,15 +1,50 @@
-# Secure DevOps Architecture - Inner/Outer App Lifecycle
-
+```
 This code creates a demo environment for Secure DevOps Architecture Pattern
 This demo code is not built for production workload
+```
 
+# Architecture and guide for secure cloud native development on GCP
 
-# Demo Guide
+# Summary
+This architecture enhances the inner and outer software development loops in Google Cloud Platform environments, while satisfying key security requirements. Automated with Terraform for minimal setup, it integrates key services like Skaffold, Jib, and Minikube within a Cloud Workstation, and services like Cloud Build, Cloud Deploy, and GKE, all under strict IAM policies and private networking. This solution streamlines development cycles and secure deployments, balancing rapid innovation with key security controls, and aligning with enterprise compliance standards.
+
+# Architecture
+
+## Design Diagrams
+<img alt="Infra Arch" src="https://github.com/mgaur10/appmod-temp/assets/38972/7edee343-d6d4-4de3-a462-6b457e30478c" width="900" />
+
+## Product and services
 This demo uses Terraform to setup the Secure DevOps Architecture in a single folder and single project. The underlying infrastructure uses Google Cloud services like  
-[Artifact Registry](https://cloud.google.com/artifact-registry), [Assured Open Source Software](https://cloud.google.com/assured-open-source-software), [Binary Authorization](https://cloud.google.com/binary-authorization), [Cloud Build](https://cloud.google.com/build), [Cloud Deploy](https://cloud.google.com/deploy), 
-[Cloud Key Management](https://cloud.google.com/kms), [Compute Engine](https://cloud.google.com/compute), [GKE](https://cloud.google.com/containers), [Datastore](https://cloud.google.com/datastore), [Cloud DNS](https://cloud.google.com/dns), [Cloud Logging](https://cloud.google.com/logging), [Storage](https://cloud.google.com/storage) and [Cloud Workstations](https://cloud.google.com/workstations). 
+* [Artifact Registry](https://cloud.google.com/artifact-registry)
+* [Assured Open Source Software](https://cloud.google.com/assured-open-source-software)
+* [Binary Authorization](https://cloud.google.com/binary-authorization)
+* [Cloud Build](https://cloud.google.com/build), [Cloud Deploy](https://cloud.google.com/deploy) 
+* [Cloud Key Management](https://cloud.google.com/kms)
+* [Compute Engine](https://cloud.google.com/compute)
+* [GKE](https://cloud.google.com/containers)
+* [Cloud DNS](https://cloud.google.com/dns)
+* [Cloud Logging](https://cloud.google.com/logging)
+* [Storage](https://cloud.google.com/storage)
+* [Cloud Workstations](https://cloud.google.com/workstations). 
 
-## How to deploy?
+## Design Considerations
+The purpose of this architecture pattern is demonstrate a secure development environment from Google Cloud native products. This project is intended for roles such as: Software Enginner/Developer, Software/Security Architect, DevOps engineer, DevSecOps engineer, or any role that intersects with those reposbilities. The automation will build an environment that enables immediate application development using Java with Spring Boot and Maven (amongst other build, containerization, and deployment technologies). All communication between the Google Cloud services occur over private networks using Cloud VPC, Private Service Connect, and Google Private Access. Having no access to the public Internet requires the Inner (via Cloud Workstations) and Outer (via Cloud Build) Developement Loops to source all artifacts from services accessible behind the VPC. Some more specific goals for the development experience are described below.
+
+Inner Development Loop experience:
+1) Use a technology stack that can be built entirely from Google Cloud hosted resources accessible via Private Google Access (i.e. Container Registry, Assured OSS, and Cloud Storage).
+2) Enhance the default Cloud Workstation runtime to support a language and framework specific (i.e. Java/SpringBoot) continuous deployment cycle in the inner dev loop.
+3) Ensure there are little to no startup commands that need to be run in the Cloud Workstation terminal to begin writing code.
+4) Ensure that there are no immediate additional Google Cloud security considerations that need to be addressed or augmented by the end user.
+
+Outer Development Loop experience for developers:
+1) There should be minimal to no regular Developer work required on the CI/CD process to deliver their application to the remote deployment environment.
+2) The Outer Development Loop scripts and configuration should be readily accessible and modifiable by developers.
+3) The remote target runtime environment (i.e. GKE) should only allow deployment of artifacts generated through the defined Outer Development Loop process.
+4) The generated artifacts should be scanned for vulnerabilities, and only deployed if the warnings are classified as ‘’Medium” or below. 
+5) A developer should be able to introduce additional container artifacts through their build configuration and deploy them without changes to their build pipeline. 
+
+
+# Deployment
 The following steps should be executed in Cloud Shell in the Google Cloud Console.
 
 ### 1. IAM Permission 
@@ -121,6 +156,16 @@ terraform destroy
 
 ## Detailed Overview
 This architecture enhances the inner and outer software development loops in Google Cloud Platform environments, while satisfying key security requirements. Automated with Terraform for minimal setup, it integrates key services like Skaffold, Jib, and Minikube within a Cloud Workstation, and services like Cloud Build, Cloud Deploy, and GKE, all under strict IAM policies and private networking. This solution streamlines development cycles and secure deployments, balancing rapid innovation with key security controls, and aligning with enterprise compliance standards.
+
+### Inner Development Loop Diagram
+<img alt="Inner Dev Loop Arch" src="https://github.com/mgaur10/appmod-temp/assets/38972/9b111769-cd3f-4d71-8cca-92e04e33c3bf" width="400" />
+
+### Outer Development Loop Diagram
+<img alt="Outer Dev Loop Arch" src="https://github.com/mgaur10/appmod-temp/assets/38972/d886362e-d959-477a-aa14-65fa80fe8fe0" width="800" />
+
+### Outer Development Loop - Build Pipelines Diagram
+<img alt="Outer Dev Loop Arch" src="https://github.com/mgaur10/appmod-temp/assets/38972/ba88b465-9bd2-4e04-b302-1aa647a2f812" width="800" />
+
 
 ### Application Development Process Flow Diagram
 ![Architecture Diagram](./appdev-flowdiagram.png)
