@@ -44,7 +44,7 @@ Outer Development Loop experience for developers:
 5) A developer should be able to introduce additional container artifacts through their build configuration and deploy them without changes to their build pipeline. 
 
 
-# Deployment
+# How to Deploy
 The following steps should be executed in Cloud Shell in the Google Cloud Console.
 
 ### 1. IAM Permission 
