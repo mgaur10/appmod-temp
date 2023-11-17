@@ -153,8 +153,8 @@ terraform destroy
 - Configuration: 2-3 mins (approx.)
 - Deployment: 20-25 mins (approx.)
 
-
-## Detailed Overview
+  <br>
+# Architecture Breakdown
 This architecture enhances the inner and outer software development loops in Google Cloud Platform environments, while satisfying key security requirements. Automated with Terraform for minimal setup, it integrates key services like Skaffold, Jib, and Minikube within a Cloud Workstation, and services like Cloud Build, Cloud Deploy, and GKE, all under strict IAM policies and private networking. This solution streamlines development cycles and secure deployments, balancing rapid innovation with key security controls, and aligning with enterprise compliance standards.
 
 ### Inner Development Loop Diagram
@@ -171,11 +171,11 @@ This architecture enhances the inner and outer software development loops in Goo
 ![Architecture Diagram](./appdev-flowdiagram.png)
 
 ### Terraform Deployment Overview
-The Terraform configuration for this solution facilitates the automated creation and deployment of necessary resources within the Google Cloud Platform (GCP). This approach ensures consistency, repeatability, and a high level of customization for users, aligning with enterprise-grade infrastructure standards.
+The Terraform configuration for this solution facilitates the automated creation and deployment of necessary resources within the Google Cloud. This approach ensures consistency, repeatability, and a high level of customization for users, aligning with enterprise-grade infrastructure standards.
 
 ### Key Features of Terraform Implementation
-1. Automated Resource Deployment: All resources required for the CSA - App Dev Arch Pattern are automatically created and deployed using Terraform.
-2. Minimal User Input Required: Users are required to modify only three key variables in the variables.tf file, making the deployment process straightforward and user-friendly.
+1. Automated Resource Deployment: All resources required for the Secure DevOps Architecture are automatically created and deployed using Terraform.
+2. Minimal User Input Required: Users are required to modify only three key variables in the variables.tf file, making the deployment process straightforward.
 3. Customizable Variables: While certain variables are preset with recommended values, users retain the flexibility to alter these as needed to suit specific organizational requirements.
 4. Organizational Structure Compliance: The deployment is structured to occur within a new folder under the organization's hierarchy in GCP, ensuring compliance with organizational policies and structure.
 
@@ -193,7 +193,7 @@ The Terraform script is designed to deploy resources within a new folder in the 
 - Aligns with Security and Compliance Standards: Adheres to organizational policies and governance structures.
 
 ## Infrastructure
-The infrastructure for this solution aims to create a seamless DevOps pipeline for developers, employing a range of Google Cloud Platform (GCP) services for an integrated development experience. It is designed for Google Cloud customers who operate within an organizational structure that mandates enterprise security measures. This architecture is designed with the following in mind: 
+The infrastructure for this solution aims to create a seamless DevOps pipeline for developers, employing a range of Google Cloud services for an integrated development experience. It is designed for Google Cloud customers who operate within an organizational structure that mandates enterprise security measures. This architecture is designed with the following in mind: 
 - No internet access for resources
 - Full compliance with commonly implemented organizational policies, including but not limited to constraints/compute.vmExternalIpAccess, constraints/compute.requireShieldedVm, and constraints/iam.disableServiceAccountKeyCreation. 
 - Compatibility with Shared VPC models, facilitating separation of duties across various departments within your organization
@@ -201,7 +201,7 @@ The infrastructure for this solution aims to create a seamless DevOps pipeline f
 - A least-privilege model through role-based IAM policies
 - Short-lived credentials for service account authentication
 
-It is recommended to coordinate with your organization's cloud security team during the deployment phase, particularly if specialized IAM permissions associated with the Compute Network Admin role are required, or if your organization has enabled the constraints/compute.restrictVpnPeerIPs Org policy.
+It is recommended to coordinate with your organization's cloud security team during the deployment phase, particularly if specialized IAM permissions associated with the Compute Network Admin role are required, or if your organization has enabled the constraints/compute.restrictVpnPeerIPs org policy.
 
 ### Secure DevOps Infrastructure Architecture Diagram
 ![Architecture Diagram](./appdev-technicalarch.png)
