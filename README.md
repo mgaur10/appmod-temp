@@ -273,8 +273,7 @@ Cloud Workstations | $4.80 | $144.00
 Cloud DNS | $0.03 | $0.90
 Cloud Key Management Service (KMS) | $0.00 | $0.00
 Kubernetes Engine | $2.40 | $72.00
-
-**Total Monthly Cost** | | **$368.10**
+**Total Monthly Cost** | - | **$368.10**
 
 
 ## Contributing
