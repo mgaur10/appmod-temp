@@ -6,7 +6,7 @@ This demo code is not built for production workload
 # Architecture and guide for secure cloud native development on GCP
 
 # Summary
-This architecture enhances the inner and outer software development loops in Google Cloud Platform environments, while satisfying key security requirements. Automated with Terraform for minimal setup, it integrates key services like Skaffold, Jib, and Minikube within a Cloud Workstation, and services like Cloud Build, Cloud Deploy, and GKE, all under strict IAM policies and private networking. This solution streamlines development cycles and secure deployments, balancing rapid innovation with key security controls, and aligning with enterprise compliance standards.
+This project presents a Secure DevOps Architecture Pattern for cloud-native development on Google Cloud. It's designed as a non-production, demonstration environment, automated with Terraform for streamlined setup. The architecture integrates key tools like Skaffold, Jib, and Minikube within a Cloud Workstation, and services like Cloud Build, Cloud Deploy, and GKE, within a secure framework of private networking and strict IAM policies. Aimed at enhancing both the inner and outer development loops, the project provides a balanced approach to rapid development and stringent security, ensuring alignment with enterprise compliance standards.
 
 # Architecture
 
@@ -28,10 +28,10 @@ This demo uses Terraform to setup the Secure DevOps Architecture in a single fol
 * [Cloud Workstations](https://cloud.google.com/workstations). 
 
 ## Design Considerations
-The purpose of this architecture pattern is demonstrate a secure development environment from Google Cloud native products. This project is intended for roles such as: Software Enginner/Developer, Software/Security Architect, DevOps engineer, DevSecOps engineer, or any role that intersects with those reposbilities. The automation will build an environment that enables immediate application development using Java with Spring Boot and Maven (amongst other build, containerization, and deployment technologies). All communication between the Google Cloud services occur over private networks using Cloud VPC, Private Service Connect, and Google Private Access. Having no access to the public Internet requires the Inner (via Cloud Workstations) and Outer (via Cloud Build) Developement Loops to source all artifacts from services accessible behind the VPC. Some more specific goals for the development experience are described below.
+his architecture demonstrates a secure Google Cloud-native development environment, catering to roles intersecting software engineering, security, DevOps, and DevSecOps. The automated setup facilitates immediate Java application development with Spring Boot and Maven, leveraging Google Cloud-hosted resources, without requiring Internet access. It emphasizes a streamlined development process with minimal initial setup and ongoing security enhancements, focusing on the following aspects:
 
 Inner Development Loop experience:
-1) Use a technology stack that can be built entirely from Google Cloud hosted resources accessible via Private Google Access (i.e. Container Registry, Assured OSS, and Cloud Storage).
+1) Fully cloud-hosted technology stack (Container Registry, Assured OSS, Cloud Storage, etc.), accessible via Cloud VPC, Private Google Access, and Private Service Connect.
 2) Enhance the default Cloud Workstation runtime to support a language and framework specific (i.e. Java/SpringBoot) continuous deployment cycle in the inner dev loop.
 3) Ensure there are little to no startup commands that need to be run in the Cloud Workstation terminal to begin writing code.
 4) Ensure that there are no immediate additional Google Cloud security considerations that need to be addressed or augmented by the end user.
@@ -70,13 +70,13 @@ cd CSA-App-Dev
 
 ### 3. Deploy the infrastructure using Terraform
 
-You will need to configure your preferred Organization ID, Billing Account ID, and end user account name. You may configuration your end user (login) account for this purpose.
+You will need to configure your preferred Organization ID, Billing Account ID, and end user account name. You may configure your end user (login) account for this purpose.
 
 To find your Organization ID, you may use the Cloud Console to open the project selector and copy your Organization ID:
 
 <img alt="Organization ID in GUI" src="https://github.com/mgaur10/appmod-temp/assets/38972/f729e791-5777-4614-85e2-2b5e38fe2c3c" width="600"/>
 
-To find you Billing Account ID, you may use the Cloud Console to navigate to the "Billing Acccounts" page and copy your Billing ID:
+To find your Billing Account ID, you may use the Cloud Console to navigate to the "Billing Acccounts" page and copy your Billing ID:
 
 <img alt="Billing ID in GUI" src="https://github.com/mgaur10/appmod-temp/assets/38972/df294c6b-ab98-4056-b492-7c5bc10dd2f9" width="600"/>
 
@@ -91,15 +91,15 @@ export TF_VAR_end_user_account="user:USERNAME@DOMAIN.com"
 
 Optionally configure Terraform to deploy a different Cloud Workstation IDE than Code OSS:
 ```BASH
-# choose a different Workstation container image for your Cloud Workstation (default is the codeoss image):
+# Choose a different Workstation container image for your Cloud Workstation (the default is the Code-OSS image):
 # https://cloud.google.com/workstations/docs/preconfigured-base-images
 export TF_VAR_workstation_image="us-central1-docker.pkg.dev/cloud-workstations-images/predefined/intellij-ultimate:latest"
 ```
 
-**Note:** All the other variables are given a default value. If you wish to change, update the corresponding variables in the variable.tf file.
+**Note:** All other variables are set to default values. To modify these, you can adjust them in the variable.tf file.
 
 
-Init and Apply The Terraform project (takes ~25 minutes to complete) 
+Init and Apply The Terraform project (~25 minutes to complete) 
 ```BASH
 gcloud config unset project
 terraform init
@@ -110,7 +110,7 @@ terraform apply --refresh-only
 ### 4: Use Your Secure Development Environment
 
 1. Open the Google Cloud Console through a web browser and navigate to the [Cloud Workstations page](https://console.cloud.google.com/workstations/list)
-2. Navigate to you Cloud Workstation (named 'hello-world-worksation' be default) and click the 'Launch' button. Note: If you see the 'Start' button instead of 'Launch', click the 'Start' button and then click the 'Launch' button once it becomes available.
+2. Navigate to you Cloud Workstation (named 'hello-world-worksation' by default) and click the 'Launch' button. Note: If you see the 'Start' button instead of 'Launch', click the 'Start' button and then click the 'Launch' button once it becomes available.
     * <img alt="Workstation File Menu GUI" src="https://github.com/mgaur10/appmod-temp/assets/38972/61aac3fa-f492-41e0-82f8-91d4e4b4b79c" width=300>
 
 4. You should now be in a new browser tab viewing your 'Code OSS' IDE.
@@ -132,15 +132,15 @@ terraform apply --refresh-only
 12. Make a code change, commit, and push to the remote repository
     * Open 'src/main/java/com/example/helloWorld/HelloWorldApplication.java' in your Cloud Workstation IDE and change the "Hello World" string to something different.
 13. Commit and push your changes to the remote repository: `git add src && git commit -m "first custom commit" && git push`.
-    * Note: Your repository is configured to use your 'gcloud' credentials to authenticate with the remote Cloud Source Repository. If there is an authentication problem, you may have forgotten to run `gcloud auth login` as described above.
+    * Note: Your repository is configured to use your 'gcloud' credentials to authenticate with the remote Cloud Source Repository. If there is an authentication problem, you may have forgotten to run `gcloud auth login` as previously described.
 14. Navigate to Cloud Build and verify that your 'Outer Dev Loop' build pipeline has completed successfully.
     * <img alt="Code Build History Page" src="https://github.com/mgaur10/appmod-temp/assets/38972/6e2a31f2-8bc9-4b64-90be-4d65edc2a2b3" width=600>
-  * NOTE: There will be a total of 4 Builds that need to be successful: 1 that is declared in your Cloud Build Trigger (cloudbuild-launcher.yaml), 1 that is submitted by Build that ran through Cloud Build Trigger (cloudbuild.yaml), 2 that are submitted automatically by Cloud Deploy for your new release (that call the skaffold 'render' and 'deploy' stages).
+    * NOTE: Four builds must successfully complete: one specified in the Cloud Build Trigger (cloudbuild-launcher.yaml), another initiated by the Build through the Cloud Build Trigger (cloudbuild.yaml), and two auto-triggered by Cloud Deploy for the new release, executing Skaffold's 'render' and 'deploy' stages.
 16. When the Cloud Build steps have completed successfully, validate that your application can receive requests from your Cloud Workstations.
     * Set your k8s configuration to reference your remote GKE Cluster: `gcloud container clusters get-credentials hello-world-cluster --region us-central1`
     * Open a tunnel via port-forwarding from your Cloud Workstation to your GKE Service: `kubectl port-forward services/spring-java-hello-world-service 9090:8080`
     * Send a request to the Java application from the Cloud Workstation terminal to the Minikube cluster: `curl http://localhost:9090`.  You may also click the hyperlink generated in your Cloud Workstation terminal from the 'http://localhost:9090' and view the application response in your web browser.
-17. When finishing testing your remote cluster, set your local k8s configuration back to Minikube for further dev work: `kubectl config use-context minikube`
+17. When finished testing your remote cluster, set your local k8s configuration back to Minikube for further dev work: `kubectl config use-context minikube`
 
 ### 5. How to clean-up?
 
