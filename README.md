@@ -135,22 +135,33 @@ terraform apply --refresh-only
 6. You should see messages about Maven installation, Minikube starting, and Skaffold starting
 7. Authorize your end-user account to the Workstation 'gcloud' cli in the terminal: `gcloud auth login`, and follow the steps to sign in.
 8. Verify that the sample application is running and responding to requests
-    * View the Skaffold logs and ensure that the service is running: `tail -f /var/log/skaffold.log` 
-    * You should see a similar message towards the end of the logs: "Started HelloWorldApplication in 3.195 seconds"
-    * Send a request to the Java application from the Cloud Workstation terminal to the Minikube cluster: `curl http://localhost:9000`. 
-    * NOTE: Skaffold is configured to forward port 9000 to your local Minikube k8s service. You may also click the hyperlink generated in your Cloud Workstation terminal from the 'http://localhost:9000' and view the application response in your web browser.
+    * View the Skaffold logs and ensure that the service is running: `tail -f /var/log/skaffold.log`
+      * You should see a similar message towards the end of the logs: "Started HelloWorldApplication in 3.195 seconds"
+      * If you see the message "Checking Cache.." allow ~1 minute for Skaffold to complete it's one-time setup before it builds that application.
+      * If you see errors in the Skaffold logs, please troubleshoot accordingly or open a new issue to this repository.
+    * Send a request to the Java application from the Cloud Workstation terminal to the Minikube cluster:
+      ```
+      curl http://localhost:9000/
+      ```
+9. Make a request to the application through Workstation Public Gateway
+    * Click the hyperlink generated in your Cloud Workstation terminal from the previous curl to 'http://localhost:9000/' and view the application response in your web browser. You should see a new browser tab open to an address of the following format: `https://9000-$WORKSTATION_ID.$CLUSTER_ID.cloudworkstations.dev/`.
+    * Note: The Cloud Workstation Public Gateway requires a valid ID token to authenticate your identity. Under most circumstances no action is required on your end. If you are currently signed in to multiple Google account in the same web browser session, you may end up on web page suggesting that your access is denied. In this case ensure that your 'authuser' query param (e.g. authuser=1) is set to the correct authenticated user session and reload the page. 
+
 9. Make a code change, commit, and push to the remote repository
-    * Open 'src/main/java/com/example/helloWorld/HelloWorldApplication.java' in your Cloud Workstation IDE and change the "Hello World" string to something different.
-10. Commit and push your changes to the remote repository: `git add src && git commit -m "first custom commit" && git push`.
+    * Open `src/main/java/com/example/helloWorld/HelloWorldApplication.java` in your Cloud Workstation IDE and change the "Hello World" string to something different.
+10. Commit and push your changes to the remote repository:
+    ```
+    git add src && git commit -m "first custom commit" && git push
+    ```
     * Note: Your repository is configured to use your 'gcloud' credentials to authenticate with the remote Cloud Source Repository. If there is an authentication problem, you may have forgotten to run `gcloud auth login` as previously described.
-11. Navigate to Cloud Build and verify that your 'Outer Dev Loop' build pipeline has completed successfully.
+12. Navigate to Cloud Build and verify that your 'Outer Dev Loop' build pipeline has completed successfully.
     * <img alt="Code Build History Page" src="https://github.com/mgaur10/appmod-temp/assets/38972/6e2a31f2-8bc9-4b64-90be-4d65edc2a2b3" width=600>
     * NOTE: Four builds must successfully complete: one specified in the Cloud Build Trigger (cloudbuild-launcher.yaml), another initiated by the Build through the Cloud Build Trigger (cloudbuild.yaml), and two auto-triggered by Cloud Deploy for the new release, executing Skaffold's 'render' and 'deploy' stages.
-12. When the Cloud Build steps have completed successfully, validate that your application can receive requests from your Cloud Workstations.
+13. When the Cloud Build steps have completed successfully, validate that your application can receive requests from your Cloud Workstations.
     * Set your k8s configuration to reference your remote GKE Cluster: `gcloud container clusters get-credentials hello-world-cluster --region us-central1`
     * Open a tunnel via port-forwarding from your Cloud Workstation to your GKE Service: `kubectl port-forward services/spring-java-hello-world-service 9090:8080`
     * Send a request to the Java application from the Cloud Workstation terminal to the Minikube cluster: `curl http://localhost:9090`.  You may also click the hyperlink generated in your Cloud Workstation terminal from the 'http://localhost:9090' and view the application response in your web browser.
-13. When finished testing your remote cluster, set your local k8s configuration back to Minikube for further dev work: `kubectl config use-context minikube`
+14. When finished testing your remote cluster, set your local k8s configuration back to Minikube for further dev work: `kubectl config use-context minikube`
 
 ### 5. How to clean-up?
 
