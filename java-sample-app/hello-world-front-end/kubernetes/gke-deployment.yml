@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-world-front-end
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello-world-front-end-deployment
+  template:
+    metadata:
+      labels:
+        app: hello-world-front-end-deployment
+    spec:
+      containers:
+        - name: hello-world-front-end-pod
+          image: hello-world-front-end
+          imagePullPolicy: Always # Forces GKE to always pull from Artifact Registry 
+          ports:
+            - name: http
+              containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-world-front-end-service
+spec:
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 8080
+      nodePort: 32322
+  selector:
+    app: hello-world-front-end-deployment

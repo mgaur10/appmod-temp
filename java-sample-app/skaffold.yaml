@@ -2,6 +2,9 @@ apiVersion: skaffold/v4beta6
 kind: Config
 build:
   artifacts:
+    - image: hello-world-front-end
+      docker: {}
+      context: hello-world-front-end
     - image: spring-java-hello-world
       jib: {}
 deploy:
@@ -9,6 +12,7 @@ deploy:
 manifests:
   rawYaml:
     - kubernetes/deployment.yml
+    - hello-world-front-end/kubernetes/deployment.yml
 
 profiles:
   - name: dev
@@ -22,15 +26,22 @@ profiles:
       artifacts:
         - image: spring-java-hello-world
           jib: {}
+        - image: hello-world-front-end
+          docker: {}
+          context: hello-world-front-end
     manifests:
       rawYaml:
         - kubernetes/deployment.yml
+        - hello-world-front-end/kubernetes/deployment.yml
     portForward:
       - resourceType: service
         resourceName: spring-java-hello-world-service
         port: 8080
         localPort: 9000
-
+      - resourceType: service
+        resourceName: hello-world-front-end-service
+        port: 8080
+        localPort: 9001
   - name: staging
     build:
       local:
@@ -38,8 +49,12 @@ profiles:
       artifacts:
         - image: spring-java-hello-world
           jib: {}
+        - image: hello-world-front-end
+          docker: {}
+          context: hello-world-front-end
     manifests:
       rawYaml:
         - kubernetes/gke-deployment.yml
+        - hello-world-front-end/kubernetes/gke-deployment.yml
     deploy:
       kubectl: {}
